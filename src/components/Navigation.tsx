@@ -218,7 +218,7 @@ const handleSearchTextChange = useDebouncedCallback((searchTerm) => {
                     <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
                       <User size={16} className="text-muted-foreground" />
                     </div>
-                  )}
+                  )} 
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">

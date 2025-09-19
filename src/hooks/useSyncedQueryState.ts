@@ -59,7 +59,7 @@ export function useSyncedQueryState<T extends Record<string, any>>(
     setState((prev) =>
       JSON.stringify(prev) === JSON.stringify(next) ? prev : next
     );
-  }, [JSON.stringify(searchParams.entries), initialRef.current, storageKey]);
+  }, [JSON.stringify(searchParams.entries), searchParams, initialState, storageKey]);
 
   // Update URL and localStorage
   const updateState = useCallback(
@@ -110,7 +110,7 @@ export function useSyncedQueryState<T extends Record<string, any>>(
         return newState;
       });
     },
-    [pathname, JSON.stringify(searchParams.entries), router, storageKey]
+    [pathname, JSON.stringify(searchParams.entries), searchParams, router, storageKey]
   );
 
   // Reset to initial state

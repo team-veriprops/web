@@ -12,9 +12,13 @@ import { Skeleton } from '@3rdparty/ui/skeleton';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { type Property } from '@components/property/models';
+import { useParams } from 'next/navigation';
 
-const CityProperties = ({ params }: { params: { city: string; property_type: string } }) => {
-  const { city, property_type } = params;
+const CityProperties = () => {
+  
+  const params = useParams();
+  const city = params.city as string;
+  const property_type = params.property_type as string;
   const [properties, setProperties] = useState<Property[]>([]);
   // const [loading, setLoading] = useState(true);
 

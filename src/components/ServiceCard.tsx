@@ -4,10 +4,11 @@
 import React, { useState } from 'react';
 import { Star, Clock, Eye, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
-import type { Service } from '../data/seed';
 import { Badge } from '@3rdparty/ui/badge';
 import { Button } from '@3rdparty/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@3rdparty/ui/avatar';
+import { Service } from './property/models';
+import { formatPrice } from '@lib/utils';
 
 interface ServiceCardProps {
   service: Service;
@@ -24,15 +25,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   const handleViewDetails = () => {
     onViewDetails?.(service);

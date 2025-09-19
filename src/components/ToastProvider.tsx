@@ -2,8 +2,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
-import { useToasts } from '../store/useStore';
 import { Button } from '@3rdparty/ui/button';
+import { useToasts } from '@stores/useStore';
 
 export const ToastProvider: React.FC = () => {
   const { toasts, removeToast } = useToasts();

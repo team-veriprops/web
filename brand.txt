@@ -1,0 +1,90 @@
+Company name, 'appodus', all small caps.
+
+
+Brand Positioning Statement: For early-stage startups and growth-focused founders,
+appodus is the strategic technology partner that
+builds powerful digital products end-to-end — from idea to launch and beyond.
+Unlike freelance developers or bloated agencies,
+we move fast, think like founders, and build like CTOs,
+delivering not just code, but momentum.
+
+Tagline: Build Fast. Scale Smart
+
+
+Key Brand Pillars:
+1. Founder-Minded: We understand startups because we think like them.
+2. Full-Cycle Execution: From design to deployment, we handle it all.
+3. Speed with Strategy: We ship quickly without compromising product thinking.
+4. Product Obsessed: Not just delivery — we build experiences users love.
+5. Reliable Tech Partner: We’re with you from MVP to scale.
+
+Note:
+We give you owner access to your github repo - Full access to your codebase.
+
+
+Brand Voice Guide:
+
+1. Brand Personality:
+Trait            |	Description 
+-----------------------------------------------------------------------------
+Smart	         |   We’re strategic thinkers who understand startups deeply.
+Fast-moving	     |   We value momentum. Our tone reflects energy, clarity, and forward motion.
+Founder-minded	 |   We think like our clients: lean, product-focused, and ambitious.
+Confident	     |   We don’t oversell. We speak with clarity, not hype.
+Supportive	     |   We’re on your team. Our tone is collaborative, not transactional.
+
+
+2. Voice Pillars:
+Pillar	                    |   What It Means	                                |   Do Say	                                                    |  Don't Say
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Clear & Direct	            | Say what matters, fast.	                        | “Let’s build your MVP in 4 weeks.”	                        |  “We leverage synergies to ideate solutions.”
+Practical	                | Real-world solutions. No fluff.	                | “We ship usable products early.”	                            |  “We create digital experiences that redefine excellence.”
+Confident, Not Arrogant	    | We know our stuff, but we’re not showy.           | “We’ve launched 20+ products for startups.”                   |  “We’re the best dev agency ever.”
+Founder-Aligned	            | We understand startup pressures.	                | “Time is money. We help you move faster.”	                    |  “This may take 8-10 months and multiple phases.”
+Product-Obsessed	        | Talk about user experience, outcomes, and growth.	| “We care about what your users do, not just how it looks.”	| “Here’s a feature. Good luck.”
+
+3. Tone by Use Case:
+Use Case             |  	Tone	                 |        Notes
+-------------------------------------------------------------------------------------------------------------
+Website Copy	     |   Clear, punchy, ambitious	 |    Focus on value, credibility, and speed. CTA-focused.
+Social Media	     |   Conversational, crisp	     |    Show behind-the-scenes, wins, startup insight. Use emojis sparingly.
+Client Emails	     |   Warm, expert, proactive	 |    Sound like a co-founder, not an agency. Be direct but kind.
+Pitch Decks	         |   Strategic, confident	     |    Emphasize results, outcomes, case studies. Don’t overdesign.
+Technical Docs	     |   Clear, structured, detailed |    Keep dev docs simple and outcome-oriented.
+
+4. Sample Phrases (Voice in Action):
+Say: “We help founders turn ideas into fast-moving products.”
+
+Say: “From MVP to scale, we build with speed and product sense.”
+
+Say: “You get a hands-on team that thinks like a CTO.”
+
+Don't say: “We’re a full-stack powerhouse disrupting the digital transformation landscape.”
+
+Don't say: “Let’s synergize your vision into a robust enterprise-grade solution.”
+
+
+Brand Color Palette:
+1. Primary Colors:
+Color	             | Usage	                | Hex	    |  Notes
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Electric Indigo      |	Primary brand / CTAs	| #5C33FF	| Bold, energetic, feels modern but not too flashy. Conveys speed + confidence.
+Slate Charcoal	     |  Headlines, text base	| #1F1F1F	| Sophisticated, high-contrast. Keeps us sharp and professional.
+Soft White	         |  Background / whitespace	| #FAFAFA	| Clean, minimal, and founder-friendly. Never clinical.
+
+2. Accent Colors:
+Color	             |  Usage	                        | Hex	    | Notes
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Startup Mint	     |  Success states, highlights	    | #00C48C	| Fresh, energizing. Reflects early-stage momentum and growth.
+Warm Coral	         |  Highlights, secondary CTAs	    | #FF6A5C	| Brings warmth and human energy, used sparingly.
+Sky Gray	         |  Borders, secondary UI elements	| #E0E0E0	| Keeps layouts light and modern without feeling washed out.
+
+
+SEO / Keyword Coverage:
+1. MVP development
+2. Startup app development
+3. Internal tool builders
+4. Full-stack product team
+5. Rapid app launch
+6. Startup software partner
+

@@ -1,0 +1,55 @@
+
+  @theme inline  {
+ /* Light theme with soft, professional colors */
+    --color-background: hsl(0 0% 99%);
+    --color-foreground: hsl(215 25% 15%);
+
+    --color-card: hsl(0 0% 100%);
+    --color-card-foreground: hsl(215 25% 15%);
+
+    --color-popover: hsl(0 0% 100%);
+    --color-popover-foreground: hsl(215 25% 15%);
+
+    /* Deep blue primary for CTAs and branding */
+    --color-primary: hsl(215 85% 20%);
+    --color-primary-foreground: hsl(0 0% 98%);
+    --color-primary-hover: hsl(215 85% 25%);
+
+    /* Soft gray secondary */
+    --color-secondary: hsl(210 20% 96%);
+    --color-secondary-foreground: hsl(215 25% 20%);
+
+    /* Muted backgrounds and text */
+    --color-muted: hsl(210 20% 96%);
+    --color-muted-foreground: hsl(215 15% 45%);
+
+    /* Soft mint accent */
+    --color-accent: hsl(165 55% 92%);
+    --color-accent-foreground: hsl(165 85% 25%);
+    --color-accent-strong: hsl(165 85% 35%);
+
+    --color-destructive: hsl(0 84.2% 60.2%);
+    --color-destructive-foreground: hsl(210 40% 98%);
+
+    --color-border: hsl(215 15% 90%);
+    --color-input: hsl(215 15% 94%);
+    --color-ring: hsl(215 85% 20%);
+
+    --radius: 0.5rem;
+
+    --color-sidebar-background: hsl(0 0% 98%);
+
+    --color-sidebar-foreground: hsl(240 5.3% 26.1%);
+
+    --color-sidebar-primary: hsl(240 5.9% 10%);
+
+    --color-sidebar-primary-foreground: hsl(0 0% 98%);
+
+    --color-sidebar-accent: hsl(240 4.8% 95.9%);
+
+    --color-sidebar-accent-foreground: hsl(240 5.9% 10%);
+
+    --color-sidebar-border: hsl(220 13% 91%);
+
+    --color-sidebar-ring: hsl(217.2 91.2% 59.8%);
+  }

@@ -178,7 +178,7 @@ export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) 
         <Card className="p-6 text-center">
           <h2 className="text-2xl font-bold text-foreground mb-4">Tour this Property</h2>
           <p className="text-muted-foreground mb-6">
-            Schedule a private tour with one of our experienced agents. We'll show you around and answer all your questions.
+            {"Schedule a private tour with one of our experienced agents. We'll show you around and answer all your questions."}
           </p>
           <button className="btn-primary px-8 py-3 rounded-lg font-medium transition-all hover:-translate-y-0.5">
             Check Tour Availability
@@ -204,7 +204,7 @@ export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) 
               </div>
               <div className="flex-1">
                 <p className="text-sm text-foreground">
-                  Hi! I'm here to help you with any questions about this property. Feel free to ask about the neighborhood, pricing, or anything else!
+                  {"Hi! I'm here to help you with any questions about this property. Feel free to ask about the neighborhood, pricing, or anything else!"}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">Veriprops Agent • Just now</p>
               </div>

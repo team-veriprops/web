@@ -1,7 +1,6 @@
 // Veriprops Global State Management with Zustand
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Property, Service } from '../data/seed';
 
 // Wishlist Store
 interface WishlistState {

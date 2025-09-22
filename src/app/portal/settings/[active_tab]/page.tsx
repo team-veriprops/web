@@ -11,7 +11,7 @@ interface SettingsPageProps {
   };
 }
 
-export default function SettingsPage({ params }: SettingsPageProps }) {
+export default function SettingsPage({ params }: SettingsPageProps) {
   const { active_tab } = params;
 
   return (

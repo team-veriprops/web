@@ -6,13 +6,13 @@ export const metadata: Metadata = {
 };
 
 interface SettingsPageProps {
-  params: {
-    active_tab: string;
-  };
+  params: Promise<{
+    active_tab?: string;
+  }>;
 }
 
-export default function SettingsPage({ params }: SettingsPageProps) {
-  const { active_tab } = params;
+export default async function SettingsPage({ params }: SettingsPageProps) {
+  const { active_tab } = await params;
 
   return (
     <div className="space-y-6 animate-fade-in">

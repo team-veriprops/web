@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description: "Manage your profile, security, notifications, and contract details",
 };
 
-export default function SettingsPage({ params }: { params: { active_tab?: string } }) {
+export default function SettingsPage({ params }: { params: { active_tab: string } }) {
   const { active_tab } = params;
 
   return (

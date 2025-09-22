@@ -6,26 +6,26 @@ import { Button } from '@3rdparty/ui/button';
 import { Badge } from '@3rdparty/ui/badge';
 import { MapPin, Heart, Share2, Eye, Bed, Bath, Square, Search } from 'lucide-react';
 
-import { PriceFilter } from '@components/Search/PriceFilter';
-import { BedsFilter } from '@components/Search/BedsFilter';
-import { HomeTypeFilter } from '@components/Search/HomeTypeFilter';
-import { LandTypeFilter } from '@components/Search/LandTypeFilter';
-import { FiltersSheet } from '@components/Search/FiltersSheet';
-import { SaveSearchDialog } from '@components/Search/SaveSearchDialog';
-import { LayoutSelector } from '@components/Search/LayoutSelector';
-import { SortSelector } from '@components/Search/SortSelector';
-import { FilterChips } from '@components/Search/FilterChips';
+import { PriceFilter } from '@components/website/property/Search/PriceFilter';
+import { BedsFilter } from '@components/website/property/Search/BedsFilter';
+import { HomeTypeFilter } from '@components/website/property/Search/HomeTypeFilter';
+import { LandTypeFilter } from '@components/website/property/Search/LandTypeFilter';
+import { FiltersSheet } from '@components/website/property/Search/FiltersSheet';
+import { SaveSearchDialog } from '@components/website/property/Search/SaveSearchDialog';
+import { LayoutSelector } from '@components/website/property/Search/LayoutSelector';
+import { SortSelector } from '@components/website/property/Search/SortSelector';
+import { FilterChips } from '@components/website/property/Search/FilterChips';
 
 import { useSyncedQueryState } from '@hooks/useSyncedQueryState';
 import { useDebounce } from '@hooks/useDebounce';
 // import { getMockResults } from '@lib/mockData';
 import { useParams } from "next/navigation";
-import { Property, PropertyType, TransactionCurrency } from '@components/property/models';
+import { Property, PropertyType, TransactionCurrency } from '@components/website/property/models';
 import { mockApi } from '@data/seed';
 import { formatMeasurement, formatPrice, handlePropertyViewDetails } from '@lib/utils';
-import { PropertyCard } from '@components/PropertyCard';
+import { PropertyCard } from '@components/website/PropertyCard';
 
-export default function SearchResults() {
+export default function SearchResultsPage() {
   const [mounted, setMounted] = useState(false);
   const params = useParams();
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -63,7 +63,7 @@ export default function SearchResults() {
     // Load initial data
   useEffect(() => {
       loadData();
-  }, [filters]);
+  }, [filters, category]);
 
   const loadData = async () => {
       try {

@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Button } from '@3rdparty/ui/button';
-import { PropertyCard } from '@components/PropertyCard';
-import { PropertyType, type Property } from '@components/property/models';
+import { PropertyCard } from '@components/website/PropertyCard';
+import { PropertyType, type Property } from '@components/website/property/models';
 
 interface CityPropertyGroupProps {
   city: string;

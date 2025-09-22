@@ -1,5 +1,5 @@
 import { format } from 'date-fns-tz';
-import { Measurement, Money, Property } from '@components/property/models';
+import { Measurement, Money, Property } from '@components/website/property/models';
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { redirect } from 'next/navigation';
@@ -61,3 +61,5 @@ export const formatMeasurement = (measurement: Measurement) => {
 export const handlePropertyViewDetails = (property: Property) => {
     redirect(`/properties/${property.type.toLowerCase()}s/${property.slug}`);
 };
+
+export const onLogoutRedirect = () => {redirect("/")}

@@ -6,8 +6,8 @@ import { AuthModal } from "@components/user/auth/AuthModal";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "appodus - Strategic Tech Partner for Fast-Moving Startups",
-  description: "Build Fast. Scale Smart. We help founders turn ideas into fast-moving products with full-cycle execution: web apps, mobile apps, dashboards, and more.",
+  title: "Verified properties for sale | Veriprops",
+  description: "Nigeria’s trusted marketplace for verified properties and real estate services - connecting buyers, sellers, and professionals with confidence. In the rare event of a dispute, we stand firmly with our buyers, offering full support, including legal representation.",
   icons: {
     icon: '/favicon.png',
   },

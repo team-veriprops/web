@@ -1,4 +1,5 @@
 // Veriprops Global State Management with Zustand
+import { Company } from '@components/portal/company/models';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -227,6 +228,7 @@ export const useToasts = create<ToastState>((set, get) => ({
 interface UIState {
   isMobileMenuOpen: boolean;
   isCompareModalOpen: boolean;
+  isOnBoardingModalOpen: boolean;
   isProfileDropdownOpen: boolean;
   searchFilters: {
     location: string;
@@ -235,11 +237,14 @@ interface UIState {
     maxPrice: number;
     verified: boolean;
   };
+  activeCompany: Company | null;
   setMobileMenuOpen: (open: boolean) => void;
   setCompareModalOpen: (open: boolean) => void;
+  setOnBoardingModalOpen: (open: boolean) => void;
   setProfileDropdownOpen: (open: boolean) => void;
   updateSearchFilters: (filters: Partial<UIState['searchFilters']>) => void;
   resetSearchFilters: () => void;
+  setActiveCompany: (company: Company) => void;
 }
 
 const defaultFilters = {
@@ -253,13 +258,17 @@ const defaultFilters = {
 export const useUI = create<UIState>((set) => ({
   isMobileMenuOpen: false,
   isCompareModalOpen: false,
+  isOnBoardingModalOpen: false,
   isProfileDropdownOpen: false,
   searchFilters: defaultFilters,
+  activeCompany: null,
   setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
   setCompareModalOpen: (open) => set({ isCompareModalOpen: open }),
+  setOnBoardingModalOpen: (open) => set({ isOnBoardingModalOpen: open }),
   setProfileDropdownOpen: (open) => set({ isProfileDropdownOpen: open }),
   updateSearchFilters: (filters) => set((state) => ({
     searchFilters: { ...state.searchFilters, ...filters }
   })),
   resetSearchFilters: () => set({ searchFilters: defaultFilters }),
+  setActiveCompany: (company) => set({ activeCompany: company }),
 }));

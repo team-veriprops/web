@@ -49,8 +49,8 @@
 // }
 
 
-import { Property, PropertyType, MeasurementUnit, Service, User, RoadState, HomeType, PropertyZoning, LandTitle, PropertyStage, NearbyPlaces, LandType, TransactionCurrency, Money, HouseFilters, LandFilters, HouseProperty, LandProperty } from "@components/property/models";
-import { PropertyAssetPhotoCategory } from "@components/PropertyDetails/models";
+import { Property, PropertyType, MeasurementUnit, Service, User, RoadState, HomeType, PropertyZoning, LandTitle, PropertyStage, NearbyPlaces, LandType, TransactionCurrency, Money, HouseFilters, LandFilters, HouseProperty, LandProperty } from "@components/website/property/models";
+import { PropertyAssetPhotoCategory } from "@components/website/property/PropertyDetails/models";
 
 const nearbyPlacesMock: NearbyPlaces = {
   schools: [
@@ -2517,8 +2517,8 @@ export const mockApi = {
         break;
     }
       
-      console.log("Search results: ", results, ", category: ", category)
-      console.log("filters: ", filters)
+      // console.log("Search results: ", results, ", category: ", category)
+      // console.log("filters: ", filters)
   
     return results;
   }

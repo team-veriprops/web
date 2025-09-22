@@ -21,8 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@3rdparty/ui/select";
-import { useGlobalSettings } from '@hooks/useGlobalSettings';
-import { Language, TransactionCurrency } from '@components/property/models';
+import { useGlobalSettings } from '@stores/useGlobalSettings';
+import { Language, TransactionCurrency } from '@components/website/property/models';
 
 const Footer = () => {
   // const [language, setLanguage] = useState<'en' | 'fr'>('en');
@@ -110,7 +110,7 @@ const Footer = () => {
               <h3 className="text-xl font-bold text-foreground">veriprops</h3>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-md">
-              {'Nigeria’s trusted marketplace for verified properties and real estate services—connecting buyers, sellers, and professionals with confidence. In the rare event of a dispute, we stand firmly with our buyers, offering full support, including legal representation.'}
+              {'Nigeria’s trusted marketplace for verified properties and real estate services - connecting buyers, sellers, and professionals with confidence. In the rare event of a dispute, we stand firmly with our buyers, offering full support, including legal representation.'}
             </p>
               <div className="mt-14 text-muted-foreground ">
                 <MapPin className="h-5 w-5 inline" /> <span> 23 Agodogba Street, Parkview, Ikoyi, Lagos NG.</span>

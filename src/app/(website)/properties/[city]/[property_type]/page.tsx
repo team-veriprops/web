@@ -1,17 +1,15 @@
 'use client'
 
-// import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, MapPin } from 'lucide-react';
-import { Navigation } from '@components/Navigation';
-import { PropertyCard } from '@components/PropertyCard';
+import { PropertyCard } from '@components/website/PropertyCard';
 import { mockApi } from '@data/seed';
 import { Button } from '@3rdparty/ui/button';
 import { Badge } from '@3rdparty/ui/badge';
 import { Skeleton } from '@3rdparty/ui/skeleton';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { type Property } from '@components/property/models';
+import { type Property } from '@components/website/property/models';
 import { useParams } from 'next/navigation';
 
 const CityProperties = () => {
@@ -54,7 +52,7 @@ const CityProperties = () => {
 
   const formatTypeName = (typeName: string) => {
     if (!typeName || typeName === 'all') return 'Properties';
-    return typeName.charAt(0).toUpperCase() + typeName.slice(1) + 's';
+    return typeName.charAt(0).toUpperCase() + typeName.slice(1);
   };
 
   const PropertySkeleton = () => (

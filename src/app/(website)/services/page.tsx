@@ -4,20 +4,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { PropertyCard } from '@components/PropertyCard';
+import { PropertyCard } from '@components/website/PropertyCard';
 import { Skeleton } from '@3rdparty/ui/skeleton';
 import { Button } from '@3rdparty/ui/button';
 import { Badge } from '@3rdparty/ui/badge';
 
 import { Loader2, Filter, SortAsc, Zap } from 'lucide-react';
-import { Navigation, MobileBottomNav } from '@components/Navigation';
-import { ServiceCard } from '@components/ServiceCard';
+import { Navigation, MobileBottomNav } from '@components/website/Navigation';
 import { CityPropertyGroup } from '@components/website/CityPropertyGroup';
 import PreFooterNavigation from '@components/website/footer/PreFooterNavigation';
 import Footer from '@components/website/footer/Footer';
 import { useWishlist, useCompare, useUI } from '@stores/useStore';
 import { mockApi } from 'data/seed';
-import { type Property, type Service } from '@components/property/models';
+import { type Property, type Service } from '@components/website/property/models';
+import { ServiceCard } from '@components/website/ServiceCard';
 
 interface SearchFilters {
   location: string;
@@ -27,7 +27,7 @@ interface SearchFilters {
   verified: boolean;
 }
 
-const Index = () => {
+export default function ServicesPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -273,5 +273,3 @@ const Index = () => {
     </div>
   );
 };
-
-export default Index;

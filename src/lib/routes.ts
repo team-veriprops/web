@@ -1,8 +1,11 @@
 export const ROUTES = {
   HOME: '/',
-  START_YOUR_BUILD: '/start-your-build',
-  HOW_IT_WORKS: '/how-it-works',
-  FEATURED_WORK: '/featured-work',
+
+  
+  PORTAL: {
+    DASHBOARD: '/portal/dashboard',
+  },
+
   ABOUT: '/about',
   LOGIN: '/login',
   SIGNUP: '/signup',

@@ -7,11 +7,18 @@ import SecurityTabsContentSkeleton from "./security/skeletons/SecurityTabsConten
 import { Bell, Shield, User } from "lucide-react";
 import ProfileTabsContent from "./profile/ProfileTabsContent";
 import SecurityTabsContent from "./security/SecurityTabsContent";
+import { PageDetails } from "types/models";
+import PageHeader from "@components/ui/PageHeader";
 
-export default function SettingsTabs({active_tab}:{active_tab: string}) {
-    
+export default function SettingsTabs({
+  title,
+  description,
+  active_tab,
+}: PageDetails) {
   return (
-    <div className="w-full">
+    <div className="space-y-6 animate-fade-in">
+      <PageHeader title={title} description={description} active_tab={""} />
+
       <Tabs defaultValue={active_tab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-4 mb-8 bg-muted/50 p-1 rounded-lg h-auto">
           <TabsTrigger

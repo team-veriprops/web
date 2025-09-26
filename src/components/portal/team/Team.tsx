@@ -6,21 +6,26 @@ import RolesTable from "./RolesTable";
 import InviteMemberDialog from "./InviteMemberDialog";
 import CreateRoleDialog from "./CreateRoleDialog";
 import { useTeam } from "@hooks/useTeam";
+import { motion } from "framer-motion";
+import { title } from "process";
+import { PageDetails } from "types/models";
+import PageHeader from "@components/ui/PageHeader";
 
-export default function Team() {
+export default function Team({
+  title,
+  description,
+}: PageDetails) {
   const team = useTeam();
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-8"
+    >
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-foreground">Team & Access</h1>
-          <p className="text-muted-foreground">
-            Manage your team members, roles, and access levels
-          </p>
-        </div>
-      </div>
+      <PageHeader title={title} description={description} />
 
       <Tabs defaultValue="members" className="space-y-6">
         <TabsList>
@@ -29,32 +34,13 @@ export default function Team() {
         </TabsList>
 
         <TabsContent value="members" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold">Team Members</h2>
-              <p className="text-muted-foreground">
-                {team.teamMembers.length} member
-                {team.teamMembers.length !== 1 ? "s" : ""} in your team
-              </p>
-            </div>
-            <InviteMemberDialog team={team} />
-          </div>
           <MembersTable team={team} />
         </TabsContent>
 
         <TabsContent value="roles" className="space-y-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold">Role Management</h2>
-              <p className="text-muted-foreground">
-                Create and manage custom roles for your team
-              </p>
-            </div>
-            <CreateRoleDialog team={team} />
-          </div>
           <RolesTable team={team} />
         </TabsContent>
       </Tabs>
-    </div>
+    </motion.div>
   );
 }

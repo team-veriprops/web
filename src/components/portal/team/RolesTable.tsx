@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-} from "@3rdparty/ui/card";
+import { Card, CardContent } from "@3rdparty/ui/card";
 import {
   Table,
   TableBody,
@@ -19,25 +16,33 @@ import type { useTeam } from "@hooks/useTeam";
 import { Badge } from "@components/3rdparty/ui/badge";
 import { useGlobalSettings } from "@stores/useGlobalSettings";
 import TableFooterPagination from "@components/ui/TableFooterPagination";
+import { motion } from "framer-motion";
+import { AnimatedTableRow } from "@components/ui/AnimatedTableRow";
+import { TableToolbar } from "@components/ui/TableToolbar";
+import CreateRoleDialog from "./CreateRoleDialog";
 
 interface RolesTableProps {
   team: ReturnType<typeof useTeam>;
 }
 
 export default function RolesTable({ team }: RolesTableProps) {
-  
-    const { settings } = useGlobalSettings();
-    const [page, setPage] = useState(1);
-  
-    const start = (page - 1) * settings.rowsPerPage;
-    const end = start + settings.rowsPerPage;
-    const paginated = team.customRoles.slice(start, end);
-  
-    const totalPages = Math.ceil(team.customRoles.length / settings.rowsPerPage);
+  const { settings } = useGlobalSettings();
+  const [page, setPage] = useState(1);
+
+  const start = (page - 1) * settings.rowsPerPage;
+  const end = start + settings.rowsPerPage;
+  const paginated = team.customRoles.slice(start, end);
+
+  const totalPages = Math.ceil(team.customRoles.length / settings.rowsPerPage);
 
   return (
     <Card>
-      <CardContent>
+      <CardContent className="p-6">
+        {/* Toolbar */}
+        <TableToolbar searchPlaceholder={`Search roles...`}>
+          <CreateRoleDialog team={team} />
+        </TableToolbar>
+
         <Table>
           <TableHeader>
             <TableRow>
@@ -49,24 +54,39 @@ export default function RolesTable({ team }: RolesTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginated.map((role) => (
-              <TableRow key={role.id}>
-                <TableCell><div className="font-medium">{role.name}</div></TableCell>
-                <TableCell><div className="text-sm text-muted-foreground">{role.description}</div></TableCell>
+            {paginated.map((role, index) => (
+              <AnimatedTableRow
+                key={role.id}
+                id={role.id}
+                index={index}
+                elementOfInterest={"deletingId"}
+              >
                 <TableCell>
-                    <div className="flex gap-1 flex-wrap">
-                          {role.systemRoles.map((systemRole) => (
-                            <Badge key={systemRole} variant="outline" className="text-xs">
-                              {systemRole}
-                            </Badge>
-                          ))}
-                        </div>
+                  <div className="font-medium">{role.name}</div>
                 </TableCell>
                 <TableCell>
-                        <Badge variant={role.isSystemRole ? 'default' : 'secondary'}>
-                          {role.isSystemRole ? 'System' : 'Custom'}
-                        </Badge>
-                      </TableCell>
+                  <div className="text-sm text-muted-foreground">
+                    {role.description}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1 flex-wrap">
+                    {role.systemRoles.map((systemRole) => (
+                      <Badge
+                        key={systemRole}
+                        variant="outline"
+                        className="text-xs"
+                      >
+                        {systemRole}
+                      </Badge>
+                    ))}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={role.isSystemRole ? "default" : "secondary"}>
+                    {role.isSystemRole ? "System" : "Custom"}
+                  </Badge>
+                </TableCell>
                 <TableCell>
                   {!role.isSystemRole && (
                     <Button
@@ -78,18 +98,18 @@ export default function RolesTable({ team }: RolesTableProps) {
                     </Button>
                   )}
                 </TableCell>
-              </TableRow>
+              </AnimatedTableRow>
             ))}
           </TableBody>
         </Table>
       </CardContent>
 
       {/* Pagination footer */}
-            <TableFooterPagination
-              page={page}
-              totalPages={totalPages}
-              setPage={setPage}
-            />
+      <TableFooterPagination
+        page={page}
+        totalPages={totalPages}
+        setPage={setPage}
+      />
 
       {/* <div className="flex items-center justify-between p-4 border-t">
         <div className="flex items-center space-x-2">

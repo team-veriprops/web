@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React from 'react';
-import PropertyDetails from '@components/website/property/PropertyDetails/Index';
+import React from "react";
+import PropertyDetailsComponentPage from "@components/website/property/PropertyDetails/PropertyDetailsComponentPage";
 
-export default function LandDetailsPage() {(
-  <PropertyDetails />
-  )};
+export default function LandDetailsPage() {
+  return <PropertyDetailsComponentPage />;
+}

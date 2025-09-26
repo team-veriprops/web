@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-} from "@3rdparty/ui/card";
+import { Card, CardContent } from "@3rdparty/ui/card";
 import {
   Table,
   TableBody,
@@ -27,13 +24,16 @@ import { Button } from "@3rdparty/ui/button";
 import { Shield } from "lucide-react";
 import TableFooterPagination from "@components/ui/TableFooterPagination";
 import { useGlobalSettings } from "@stores/useGlobalSettings";
+import { motion } from "framer-motion";
+import { AnimatedTableRow } from "@components/ui/AnimatedTableRow";
+import InviteMemberDialog from "./InviteMemberDialog";
+import { TableToolbar } from "@components/ui/TableToolbar";
 
 interface MembersTableProps {
   team: ReturnType<typeof useTeam>;
 }
 
 export default function MembersTable({ team }: MembersTableProps) {
-
   const { settings } = useGlobalSettings();
   const [page, setPage] = useState(1);
 
@@ -45,7 +45,12 @@ export default function MembersTable({ team }: MembersTableProps) {
 
   return (
     <Card>
-      <CardContent>
+      <CardContent className="p-6">
+        {/* Toolbar */}
+        <TableToolbar searchPlaceholder={`Search users...`}>
+          <InviteMemberDialog team={team} />
+        </TableToolbar>
+        
         <Table>
           <TableHeader>
             <TableRow>
@@ -57,14 +62,23 @@ export default function MembersTable({ team }: MembersTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginated.map((member) => (
-              <TableRow key={member.id}>
+            {paginated.map((member, index) => (
+              <AnimatedTableRow
+                key={member.id}
+                id={member.id}
+                index={index}
+                elementOfInterest={"deletingId"}
+              >
                 <TableCell>
                   <div className="flex items-center space-x-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={member.avatar}  alt={member.name} />
+                      <AvatarImage src={member.avatar} alt={member.name} />
                       <AvatarFallback>
-                        {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        {member.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -89,9 +103,11 @@ export default function MembersTable({ team }: MembersTableProps) {
                       {team.customRoles.map((role) => (
                         <SelectItem key={role.id} value={role.name}>
                           <div className="flex items-center">
-                                  {role.name === 'Admin' && <Shield className="h-3 w-3 mr-2" />}
-                                  {role.name}
-                                </div>
+                            {role.name === "Admin" && (
+                              <Shield className="h-3 w-3 mr-2" />
+                            )}
+                            {role.name}
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -103,8 +119,8 @@ export default function MembersTable({ team }: MembersTableProps) {
                       member.status === "Active"
                         ? "default"
                         : member.status === "Pending"
-                        ? "secondary"
-                        : "destructive"
+                          ? "secondary"
+                          : "destructive"
                     }
                   >
                     {member.status}
@@ -114,11 +130,15 @@ export default function MembersTable({ team }: MembersTableProps) {
                   {new Date(member.joinDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                        <Button variant="ghost" size="sm" disabled={member.status === 'Pending'}>
-                          Remove
-                        </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={member.status === "Pending"}
+                  >
+                    Remove
+                  </Button>
                 </TableCell>
-              </TableRow>
+              </AnimatedTableRow>
             ))}
           </TableBody>
         </Table>

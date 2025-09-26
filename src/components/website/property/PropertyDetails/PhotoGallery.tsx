@@ -7,6 +7,7 @@ import PropertyAssetDetailsModal from './PropertyAssetDetailsModal';
 import { useBodyOverflowHidden } from '@hooks/useBodyOverflowHidden';
 import { PropertyAssetTab } from './models';
 import { type Property } from '@components/website/property/models';
+import { getFirstPropertyPhoto } from '@lib/utils';
 
 interface PhotoGalleryProps {
   property: Property;
@@ -41,7 +42,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ property }) => {
             onClick={() => handleImageClick(0)}
           >
             <img
-              src={property.images[0].url}
+              src={getFirstPropertyPhoto(property)}
               alt="Main property view"
               className="w-full h-full object-cover property-card-image"
             />

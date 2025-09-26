@@ -14,6 +14,8 @@ export enum PropertyAssetTab {
 
 export enum PropertyAssetPhotoCategory {
     All = "All",
+
+    // HOUSES
     Kitchen = "Kitchen",
     Bathroom = "Bathroom",
     Bedroom = "Bedroom",
@@ -21,5 +23,8 @@ export enum PropertyAssetPhotoCategory {
     Dining = "Dining",
     OtherRooms = "Other rooms",
     Exterior = "Exterior",
-    Amenities = "Amenities"
+    Amenities = "Amenities",
+
+    // LAND
+    FRONT_VIEW = "Front view"
 }

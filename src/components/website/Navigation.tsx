@@ -69,12 +69,12 @@ const handleSearchTextChange = useDebouncedCallback((searchTerm) => {
   const params = new URLSearchParams(searchParams);
   // params.set('page', '1');
   if (searchTerm) {
-    params.set('query', searchTerm);
+    params.set(settings.searchQueryKey, searchTerm);
   } else {
-    params.delete('query');
+    params.delete(settings.searchQueryKey);
   }
   replace(`${pathname}?${params.toString()}`);
- }, 300);
+ }, settings.searchDebounceSeconds);
 
  const handleCompareClick = () => {
     if (compareItems.length > 0) {

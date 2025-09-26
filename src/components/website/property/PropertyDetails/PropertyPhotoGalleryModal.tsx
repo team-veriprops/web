@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
 import { PropertyAssetPhotoCategory } from "./models";
@@ -31,8 +31,6 @@ const categories: Image["category"][] = [
 ];
 
 export default function PhotoGalleryModal({ photos, initialIndex, initialCategory, onClose }: Props) {
-  // Find the category of the initially clicked photo
-  // const initialCategory = photos[initialIndex]?.category ?? PropertyAssetPhotoCategory.All;
 
   // State for active tab and current index
   const [activeCategory, setActiveCategory] = useState<Image["category"]>(initialCategory);
@@ -44,14 +42,20 @@ export default function PhotoGalleryModal({ photos, initialIndex, initialCategor
       : photos.filter((p) => p.category === activeCategory);
   }, [activeCategory, photos]);
 
-  // Figure out where in the filtered list the initial photo is
-  // const startingFilteredIndex = useMemo(() => {
-  //   if (activeCategory === PropertyAssetPhotoCategory.All) return initialIndex;
-  //   const original = photos[initialIndex];
-  //   return filteredPhotos.findIndex((p) => p.url === original.url);
-  // }, [activeCategory, initialIndex, photos, filteredPhotos]);
-
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+const [categoriesWithPhotos, setCategoriesWithPhotos] = useState<Image["category"][]>([PropertyAssetPhotoCategory.All]);
+
+useEffect(() => {
+  let withPhotos = categories.filter((category) => {
+    const index = photos.findIndex((photo) => photo.category === category);
+    return index !== -1;
+  });
+
+  withPhotos = [...categoriesWithPhotos, ...withPhotos]
+
+  setCategoriesWithPhotos(withPhotos);
+}, [categories, photos]);
+
 
   // Navigation
   const prevPhoto = () =>
@@ -71,7 +75,7 @@ export default function PhotoGalleryModal({ photos, initialIndex, initialCategor
         <div className="flex justify-between items-center px-6 py-4 border-b border-white/20">
           {/* Tabs */}
           <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
-            {categories.map((cat) => (
+            {categoriesWithPhotos.map((cat) => (
               <button
                 key={cat}
                 onClick={() => {
@@ -123,27 +127,13 @@ export default function PhotoGalleryModal({ photos, initialIndex, initialCategor
 
           {/* Navigation arrows */}
           {/* Prev Button */}
-          {/* <button
-            onClick={prevPhoto}
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-gray-300"
-          >
-            ‹
-          </button> */}
 
-                  <button
+        <button
           onClick={prevPhoto}
           className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:text-gray-300 text-white rounded-full p-3"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
-
-
-          {/* <button
-            onClick={nextPhoto}
-            className="absolute right-6 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-gray-300"
-          >
-            ›
-          </button> */}
 
            {/* Next Button */}
         <button

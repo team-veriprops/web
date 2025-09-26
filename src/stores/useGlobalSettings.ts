@@ -1,12 +1,19 @@
-import { Language, PropertyType, TransactionCurrency } from "@components/website/property/models";
+import {
+  Language,
+  PropertyType,
+  TransactionCurrency,
+} from "@components/website/property/models";
+import { usePropertyStore } from "@components/website/property/_usePropertyStore";
 import { create } from "zustand";
-import { persist } from 'zustand/middleware';
+import { persist } from "zustand/middleware";
 
-export interface GlobalSettings{
-	language: Language;
-	currency: TransactionCurrency;
+export interface GlobalSettings {
+  language: Language;
+  currency: TransactionCurrency;
   propertyType: PropertyType;
   rowsPerPage: number;
+  searchDebounceSeconds: number;
+  searchQueryKey: string;
 }
 
 interface GlobalSettingsState {
@@ -17,6 +24,8 @@ interface GlobalSettingsState {
   setSettings: (settings: GlobalSettings) => void;
   reset: () => void;
   setRecordsPerPage: (rowsPerPage: number) => void;
+  setSearchDebounceSeconds: (searchDebounceSeconds: number) => void;
+  setSearchQueryKey: (searchQueryKey: string) => void;
 }
 
 export const useGlobalSettings = create<GlobalSettingsState>()(
@@ -27,6 +36,8 @@ export const useGlobalSettings = create<GlobalSettingsState>()(
         currency: TransactionCurrency.NGN,
         propertyType: PropertyType.LAND,
         rowsPerPage: 5,
+        searchDebounceSeconds: 300,
+        searchQueryKey: "query",
       },
       setLanguage: (language) =>
         set((state) => ({
@@ -36,10 +47,14 @@ export const useGlobalSettings = create<GlobalSettingsState>()(
         set((state) => ({
           settings: { ...state.settings, currency },
         })),
-      setPropertyType: (propertyType) =>
+      setPropertyType: (propertyType) => {
         set((state) => ({
           settings: { ...state.settings, propertyType },
-        })),
+        }));
+
+        // Sync to PropertyStore
+        usePropertyStore.getState().updateFilter("type", propertyType);
+      },
       setSettings: (settings) => set({ settings }),
       reset: () =>
         set({
@@ -48,10 +63,21 @@ export const useGlobalSettings = create<GlobalSettingsState>()(
             currency: TransactionCurrency.NGN,
             propertyType: PropertyType.LAND,
             rowsPerPage: 5,
-          }}),
+            searchDebounceSeconds: 300,
+            searchQueryKey: "query",
+          },
+        }),
       setRecordsPerPage: (rowsPerPage) =>
         set((state) => ({
           settings: { ...state.settings, rowsPerPage },
+        })),
+      setSearchDebounceSeconds: (searchDebounceSeconds) =>
+        set((state) => ({
+          settings: { ...state.settings, searchDebounceSeconds },
+        })),
+      setSearchQueryKey: (searchQueryKey) =>
+        set((state) => ({
+          settings: { ...state.settings, searchQueryKey },
         })),
     }),
     {

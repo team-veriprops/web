@@ -4,14 +4,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { PropertyCard } from '@components/website/PropertyCard';
+import { PropertyCard } from '@components/website/property/PropertyCard';
 import { Skeleton } from '@3rdparty/ui/skeleton';
 import { Button } from '@3rdparty/ui/button';
 import { Badge } from '@3rdparty/ui/badge';
 
 import { Loader2, Filter, SortAsc, Zap } from 'lucide-react';
 import { Navigation, MobileBottomNav } from '@components/website/Navigation';
-import { CityPropertyGroup } from '@components/website/CityPropertyGroup';
+import { CityPropertyGroup } from '@components/website/property/CityPropertyGroup';
 import PreFooterNavigation from '@components/website/footer/PreFooterNavigation';
 import Footer from '@components/website/footer/Footer';
 import { useWishlist, useCompare, useUI } from '@stores/useStore';

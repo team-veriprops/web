@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { Button } from '@3rdparty/ui/button';
-import { PropertyCard } from '@components/website/PropertyCard';
-import { PropertyType, type Property } from '@components/website/property/models';
+import { PropertyCard } from '@components/website/property/PropertyCard';
+import { PropertyType, QueryPropertyDto, type Property } from '@components/website/property/models';
 
 interface CityPropertyGroupProps {
   city: string;
-  properties: Property[];
+  properties: QueryPropertyDto[];
   type: PropertyType;
   onViewDetails: (property: Property) => void;
 }
@@ -61,7 +61,6 @@ export const CityPropertyGroup: React.FC<CityPropertyGroupProps> = ({
       <div className="flex justify-between items-center mb-6">
         <a
           href={`/properties/${city.toLowerCase()}/${type.toLowerCase()}s`}
-          target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-3 text-foreground hover:text-primary transition-colors group"
           title={`View all ${type.toLowerCase()}s in ${city} in a new page`}

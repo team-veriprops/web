@@ -56,13 +56,13 @@ export function SaveSearchDialog({ filters, category, hasChanges = false }: Save
   const getSuggestedName = () => {
     const parts = [];
     
-    if (filters.priceMin || filters.priceMax) {
-      if (filters.priceMin && filters.priceMax) {
-        parts.push(`₦${(filters.priceMin / 1000000).toFixed(0)}M-${(filters.priceMax / 1000000).toFixed(0)}M`);
-      } else if (filters.priceMin) {
-        parts.push(`₦${(filters.priceMin / 1000000).toFixed(0)}M+`);
+    if (filters.price_min || filters.price_max) {
+      if (filters.price_min && filters.price_max) {
+        parts.push(`₦${(filters.price_min / 1000000).toFixed(0)}M-${(filters.price_max / 1000000).toFixed(0)}M`);
+      } else if (filters.price_min) {
+        parts.push(`₦${(filters.price_min / 1000000).toFixed(0)}M+`);
       } else {
-        parts.push(`Under ₦${(filters.priceMax / 1000000).toFixed(0)}M`);
+        parts.push(`Under ₦${(filters.price_max / 1000000).toFixed(0)}M`);
       }
     }
     

@@ -1,8 +1,12 @@
 import SettingsTabs from "@components/portal/settings/SettingsTabs";
 import { Metadata } from "next";
+
+const title = "Settings";
+const description = "Manage your account settings and preferences.";
+
 export const metadata: Metadata = {
-  title: "Settings | Veriprops",
-  description: "Manage your profile, security, notifications, and contract details",
+  title: `${title} | Veriprops`,
+  description: description,
 };
 
 interface SettingsPageProps {
@@ -15,14 +19,10 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
   const { active_tab } = await params;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground">
-          Manage your account settings and preferences.
-        </p>
-      </div>
-      <SettingsTabs active_tab={active_tab!} />
-    </div>
+    <SettingsTabs
+      active_tab={active_tab!}
+      title={title}
+      description={description}
+    />
   );
 }

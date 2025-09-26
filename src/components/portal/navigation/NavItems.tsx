@@ -30,7 +30,7 @@ export const mainNavItems: NavItem[] = [
   // { name: "Messages / Discussions", path: "/portal/messages", icon: MessageSquare },
   // { name: "Transactions", path: "/portal/transactions", icon: CreditCard },
   { name: "My For Sale", path: "/portal/my-for-sale", icon: HandCoins },
-  // { name: "My Purchases", path: "/portal/purchases", icon: ShoppingCart },
+  { name: "My Purchases", path: "/portal/purchases", icon: ShoppingCart },
   { name: "Team & Access", path: "/portal/team", icon: Users },
   // { name: "Saved Searches", path: "/portal/searches", icon: SearchCheck },
   // { name: "Search Partners", path: "/portal/search-partners", icon: Handshake },

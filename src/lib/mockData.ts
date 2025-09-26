@@ -1,8 +1,8 @@
 // export type Money = number; // NGN as integer for precision
 
 // export type CommonFilters = {
-//   priceMin?: Money;
-//   priceMax?: Money;
+//   price_min?: Money;
+//   price_max?: Money;
 //   sort: 'recommended' | 'newest' | 'priceAsc' | 'priceDesc' | 'sqft' | 'lot' | 'pricePerSqft';
 //   layout: 'split' | 'map' | 'grid' | 'list';
 // };
@@ -256,11 +256,11 @@
 //   let results = [...data];
 
 //   // Apply filters
-//   if (filters.priceMin) {
-//     results = results.filter(item => item.price >= filters.priceMin!);
+//   if (filters.price_min) {
+//     results = results.filter(item => item.price >= filters.price_min!);
 //   }
-//   if (filters.priceMax) {
-//     results = results.filter(item => item.price <= filters.priceMax!);
+//   if (filters.price_max) {
+//     results = results.filter(item => item.price <= filters.price_max!);
 //   }
 
 //   // Category-specific filters

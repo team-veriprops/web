@@ -4,29 +4,29 @@ import { ClarityPageTracker } from "@components/microsoft-clarity/clarity-tracke
 import { ClarityProvider } from "@components/microsoft-clarity/clarity-provider";
 import { AuthModal } from "@components/user/auth/AuthModal";
 import { Suspense } from "react";
+import { ClientWrapperProvider } from "providers/client-wrapper";
 
 export const metadata: Metadata = {
   title: "Verified properties for sale | Veriprops",
-  description: "Nigeria’s trusted marketplace for verified properties and real estate services - connecting buyers, sellers, and professionals with confidence. In the rare event of a dispute, we stand firmly with our buyers, offering full support, including legal representation.",
+  description:
+    "Nigeria’s trusted marketplace for verified properties and real estate services - connecting buyers, sellers, and professionals with confidence. In the rare event of a dispute, we stand firmly with our buyers, offering full support, including legal representation.",
   icons: {
-    icon: '/favicon.png',
+    icon: "/favicon.png",
   },
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
-      <body
-        className=""
-      >
-        {children}
-      <ClarityProvider />
-      <ClarityPageTracker />
+      <body className="">
+        <ClientWrapperProvider>{children}</ClientWrapperProvider>
+
+        <ClarityProvider />
+        <ClarityPageTracker />
         <Suspense fallback={null}>
           <AuthModal />
         </Suspense>

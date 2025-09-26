@@ -80,7 +80,7 @@ export function FiltersSheet({ category, filters, onChange, isOpen, onOpenChange
   const handleReset = () => {
     onChange({
       ...filters,
-      titleDocs: [],
+      title_docs: [],
       stage: [],
       utilities: {},
       proximity: { categories: [], distanceKm: 10 },
@@ -127,9 +127,9 @@ export function FiltersSheet({ category, filters, onChange, isOpen, onOpenChange
                       <div key={option.id} className="flex items-center space-x-3">
                         <Checkbox
                           id={option.id}
-                          checked={filters.titleDocs?.includes(option.id) || false}
+                          checked={filters.title_docs?.includes(option.id) || false}
                           onCheckedChange={(checked) => 
-                            handleCheckboxChange('titleDocs', option.id, checked as boolean)
+                            handleCheckboxChange('title_docs', option.id, checked as boolean)
                           }
                         />
                         <label 

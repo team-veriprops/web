@@ -1,90 +1,92 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@3rdparty/ui/button';
-import { Badge } from '@3rdparty/ui/badge';
 import { MapPin, Heart, Share2, Eye, Bed, Bath, Square, Search } from 'lucide-react';
 
 import { PriceFilter } from '@components/website/property/Search/PriceFilter';
 import { BedsFilter } from '@components/website/property/Search/BedsFilter';
 import { HomeTypeFilter } from '@components/website/property/Search/HomeTypeFilter';
 import { LandTypeFilter } from '@components/website/property/Search/LandTypeFilter';
-import { FiltersSheet } from '@components/website/property/Search/FiltersSheet';
 import { SaveSearchDialog } from '@components/website/property/Search/SaveSearchDialog';
 import { LayoutSelector } from '@components/website/property/Search/LayoutSelector';
 import { SortSelector } from '@components/website/property/Search/SortSelector';
 import { FilterChips } from '@components/website/property/Search/FilterChips';
 
 import { useSyncedQueryState } from '@hooks/useSyncedQueryState';
-import { useDebounce } from '@hooks/useDebounce';
-// import { getMockResults } from '@lib/mockData';
 import { useParams } from "next/navigation";
-import { Property, PropertyType, TransactionCurrency } from '@components/website/property/models';
+import { Property, PropertyType, QueryPropertyDto, TransactionCurrency } from '@components/website/property/models';
 import { mockApi } from '@data/seed';
-import { formatMeasurement, formatPrice, handlePropertyViewDetails } from '@lib/utils';
-import { PropertyCard } from '@components/website/PropertyCard';
+import { formatMeasurement, formatPrice, getFirstPropertyPhoto, handlePropertyViewDetails } from '@lib/utils';
+import { PropertyCard } from '@components/website/property/PropertyCard';
+import { usePropertyQueries } from '@components/website/property/usePropertyQueries';
+import { usePropertyStore } from '@components/website/property/_usePropertyStore';
+import { Page } from 'types/models';
+import { usePropertyQueryState } from '@components/website/property/usePropertyStore';
+import { useGlobalSettings } from '@stores/useGlobalSettings';
 
 export default function SearchResultsPage() {
-  const [mounted, setMounted] = useState(false);
+
   const params = useParams();
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [propertySearchResults, setPropertySearchResults] = useState<Property[]>([]);
-  const debouncedQuery = useDebounce(searchQuery, 300);
-
   const category = params.category as "houses" | "lands";
+  const { settings } = useGlobalSettings();
 
-  const currency: TransactionCurrency = TransactionCurrency.NGN
+  const [filters, updateFilters, resetFilters] = usePropertyQueryState();
+  const { useSearchPropertyInfinite } = usePropertyQueries();
 
-  useEffect(() => setMounted(true), []);
+  const {
+    data,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+  } = useSearchPropertyInfinite();
 
-  const initialFilters: any = {
-    priceMin: undefined,
-    priceMax: undefined,
-    sort: 'recommended' as const,
-    layout: 'grid' as const,
-    bedrooms: 'any' as const,
-    bathrooms: 0,
-    home_types: [],
-    land_types: [],
-    titleDocs: [],
-    stage: [],
-    utilities: {},
-    proximity: { categories: [], distanceKm: 10 },
-    zoning: []
-  };
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const [filters, updateFilters] = useSyncedQueryState(
-    initialFilters,
-    `${category}-search-filters`
-  );
+      // Sync filters with store
+      useEffect(() => {
+        updateFilters({page_size: 8, type: settings.propertyType});
+      }, []);
 
-    // Load initial data
+  // Downscroll observer
   useEffect(() => {
-      loadData();
-  }, [filters, category]);
+    if (!bottomRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && hasNextPage) fetchNextPage();
+    });
+    observer.observe(bottomRef.current);
+    return () => observer.disconnect();
+  }, [bottomRef.current, hasNextPage, fetchNextPage]);
 
-  const loadData = async () => {
-      try {
-        // setLoading(true);
-        // setError(null);
-        
-        const [searchResultData] = await Promise.all([
-          mockApi.getSearchResults(category || 'houses', filters)
-        ]);
-        
-        setPropertySearchResults(searchResultData);
-        // setServices(servicesData);
-      } catch (err) {
-        // setError('Failed to load data. Please try again.');
-        console.error('Error loading data:', err);
-      } finally {
-        // setLoading(false);
-      }
+  // Sync filters with store
+  useEffect(() => {
+    const propertyType =
+      category === 'lands' ? PropertyType.LAND : PropertyType.HOUSE;
+    usePropertyStore.getState().updateFilter('type', propertyType);
+    usePropertyStore.getState().updateFilter('page_size', 8);
+  }, [category]);
+
+  const formatCityName = (cityName: string) =>
+    cityName.charAt(0).toUpperCase() + cityName.slice(1);
+
+  const formatTypeName = (typeName: string) => {
+    if (!typeName || typeName === 'all') return 'Properties';
+    return typeName.charAt(0).toUpperCase() + typeName.slice(1);
   };
 
-  // const results = getMockResults(category || 'houses', filters);
+  // Flattened data
+  const allProperties =
+    data?.pages.flatMap((page: Page<QueryPropertyDto>) => page.data) ?? [];
+
+
+
+
+
+
 
   const handleFilterChange = (key: string, value: any) => {
     updateFilters({ [key]: value });
@@ -93,8 +95,8 @@ export default function SearchResultsPage() {
   const handleRemoveFilter = (key: string) => {
     const updates: any = {};
     if (key === 'price') {
-      updates.priceMin = undefined;
-      updates.priceMax = undefined;
+      updates.price_min = undefined;
+      updates.price_max = undefined;
     } else {
       updates[key] = key.includes('Types') || key.includes('Docs') || key.includes('stage') || key.includes('zoning') 
         ? [] 
@@ -104,7 +106,7 @@ export default function SearchResultsPage() {
   };
 
   const handleClearAll = () => {
-    updateFilters(initialFilters);
+    resetFilters()
   };
 
   // const formatPrice = (price: number) => `₦${(price / 1000000).toFixed(0)}M`;
@@ -151,7 +153,7 @@ export default function SearchResultsPage() {
     if (filters.layout === 'list') {
       return (
         <motion.div layout className="space-y-4">
-          {propertySearchResults.map((property, index) => (
+          {allProperties.map((property, index) => (
             <motion.div
               key={index}
               layout
@@ -160,7 +162,7 @@ export default function SearchResultsPage() {
               <div className="flex gap-6">
                 <div className="w-48 h-32 bg-muted rounded-lg flex-shrink-0">
                   <img
-                    src={property.images[0].url}
+                    src={getFirstPropertyPhoto(property)}
                     alt={property.title}
                     className="w-full h-full object-cover rounded-lg"
                   />
@@ -235,7 +237,7 @@ export default function SearchResultsPage() {
       layout
       className={`grid grid-cols-1 md:grid-cols-2  lg:grid-cols-${isSplit ? 2 : 3} xl:grid-cols-${isSplit ? 2 : 4} gap-6`}
     >
-      {propertySearchResults.map((property, index) => (
+      {allProperties.map((property, index) => (
         <div
             key={index}
             className="flex-shrink-0 md:w-75 2xl:w-80"
@@ -245,82 +247,15 @@ export default function SearchResultsPage() {
                 onViewDetails={() => handlePropertyViewDetails(property)}
           />
         </div>
-        // <motion.div key={result.id} layout className="property-card group cursor-pointer">
-        //   <div className="relative overflow-hidden rounded-t-xl">
-        //     <img
-        //       src="/placeholder.svg"
-        //       alt={result.title}
-        //       className="w-full h-48 object-cover property-card-image"
-        //     />
-        //     <div className="absolute top-3 left-3">
-        //       <Badge className="verified-badge">Verified</Badge>
-        //     </div>
-        //     <div className="absolute top-3 right-3 flex gap-2">
-        //       <Button variant="secondary" size="sm" className="heart-button">
-        //         <Heart className="h-4 w-4" />
-        //       </Button>
-        //       <Button variant="secondary" size="sm">
-        //         <Share2 className="h-4 w-4" />
-        //       </Button>
-        //     </div>
-        //   </div>
-
-        //   <div className="p-4">
-        //     <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
-        //       {result.title}
-        //     </h3>
-        //     <p className="text-muted-foreground mb-3 flex items-center gap-1">
-        //       <MapPin className="h-4 w-4" />
-        //       {result.location.area}, {result.location.city}
-        //     </p>
-
-        //     <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
-        //       {category === 'houses' && 'beds' in result && (
-        //         <>
-        //           <div className="flex items-center gap-1">
-        //             <Bed className="h-4 w-4" />
-        //             <span>{result.beds}</span>
-        //           </div>
-        //           <div className="flex items-center gap-1">
-        //             <Bath className="h-4 w-4" />
-        //             <span>{result.baths}</span>
-        //           </div>
-        //           <div className="flex items-center gap-1">
-        //             <Square className="h-4 w-4" />
-        //             <span>{result.sqft.toLocaleString()}</span>
-        //           </div>
-        //         </>
-        //       )}
-        //       {category === 'lands' && 'size' in result && (
-        //         <div className="flex items-center gap-1">
-        //           <Square className="h-4 w-4" />
-        //           <span>{result.size.toLocaleString()} sqm</span>
-        //         </div>
-        //       )}
-        //     </div>
-
-        //     <div className="flex items-center justify-between">
-        //       <div>
-        //         <div className="text-2xl font-bold text-primary">
-        //           {formatPrice(result.price)}
-        //         </div>
-        //         <div className="text-sm text-muted-foreground">
-        //           {formatPrice(result.pricePerSqft)}/sqft
-        //         </div>
-        //       </div>
-        //       <Button size="sm">View</Button>
-        //     </div>
-        //   </div>
-        // </motion.div>
       ))}
     </motion.div>
   );
 
   // ---------- PAGE RENDER ---------- //
-  if (!mounted) return null;
-  if (!category || !['houses', 'lands'].includes(category)) {
-    return <div>Invalid category</div>;
-  }
+  // if (!mounted) return null;
+  // if (!category || !['houses', 'lands'].includes(category)) {
+  //   return <div>Invalid category</div>;
+  // }
 
   return (
     <div className="sticky top-0 min-h-screen bg-background">
@@ -334,10 +269,10 @@ export default function SearchResultsPage() {
               <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-3 flex-wrap">
                   <PriceFilter
-                    min={filters.priceMin}
-                    max={filters.priceMax}
-                    currency={currency}
-                    onChange={(min, max) => updateFilters({ priceMin: min, priceMax: max })}
+                    min={filters.price_min}
+                    max={filters.price_max}
+                    currency={settings.currency}
+                    onChange={(min, max) => updateFilters({ price_min: min, price_max: max })}
                   />
                   {category === 'houses' && (
                     <>
@@ -347,14 +282,14 @@ export default function SearchResultsPage() {
                         onChange={(bedrooms, bathrooms) => updateFilters({ bedrooms, bathrooms })}
                       />
                       <HomeTypeFilter
-                        selected={filters.homeTypes}
+                        selected={filters.home_types}
                         onChange={(types) => handleFilterChange('home_types', types)}
                       />
                     </>
                   )}
                   {category === 'lands' && (
                     <LandTypeFilter
-                      selected={filters.landTypes}
+                      selected={filters.land_types}
                       onChange={(types) => handleFilterChange('land_types', types)}
                     />
                   )}
@@ -394,10 +329,10 @@ export default function SearchResultsPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="text-muted-foreground">
-                    {propertySearchResults.length} {propertySearchResults.length === 1 ? 'property' : 'properties'}
+                    {allProperties.length} {allProperties.length === 1 ? 'property' : 'properties'}
                   </p>
                   <SortSelector
-                    selected={filters.sort}
+                    selected={filters.sort!}
                     onChange={(sort) => handleFilterChange('sort', sort)}
                   />
                 </div>
@@ -412,10 +347,10 @@ export default function SearchResultsPage() {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3 flex-wrap">
               <PriceFilter
-                min={filters.priceMin}
-                max={filters.priceMax}
-                currency={currency}
-                onChange={(min, max) => updateFilters({ priceMin: min, priceMax: max })}
+                min={filters.price_min}
+                max={filters.price_max}
+                currency={settings.currency}
+                onChange={(min, max) => updateFilters({ price_min: min, price_max: max })}
               />
               {category === 'houses' && (
                 <>
@@ -425,14 +360,14 @@ export default function SearchResultsPage() {
                     onChange={(bedrooms, bathrooms) => updateFilters({ bedrooms, bathrooms })}
                   />
                   <HomeTypeFilter
-                    selected={filters.homeTypes}
+                    selected={filters.home_types}
                     onChange={(types) => handleFilterChange('home_types', types)}
                   />
                 </>
               )}
               {category === 'lands' && (
                 <LandTypeFilter
-                  selected={filters.landTypes}
+                  selected={filters.land_types}
                   onChange={(types) => handleFilterChange('land_types', types)}
                 />
               )}
@@ -448,7 +383,7 @@ export default function SearchResultsPage() {
             </div>
             <div className="flex items-center gap-3">
               <LayoutSelector
-                selected={filters.layout}
+                selected={filters.layout!}
                 onChange={(layout) => handleFilterChange('layout', layout)}
               />
             </div>
@@ -472,10 +407,10 @@ export default function SearchResultsPage() {
             </div>
             <div className="flex items-center gap-3">
               <p className="text-muted-foreground">
-                {propertySearchResults.length} {propertySearchResults.length === 1 ? 'property' : 'properties'}
+                {allProperties.length} {allProperties.length === 1 ? 'property' : 'properties'}
               </p>
               <SortSelector
-                selected={filters.sort}
+                selected={filters.sort!}
                 onChange={(sort) => handleFilterChange('sort', sort)}
               />
             </div>
@@ -494,7 +429,7 @@ export default function SearchResultsPage() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
           >
-            {propertySearchResults.length === 0 ? (
+            {allProperties.length === 0 ? (
               <div className="text-center py-16">
                 <div className="w-24 h-24 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
                   <Search className="h-12 w-12 text-muted-foreground" />
@@ -509,18 +444,12 @@ export default function SearchResultsPage() {
                 <>
                   {renderResults()}
 
-                  {propertySearchResults.length > 0 && (
-                    <motion.div
-                      className="text-center mt-12"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.3 }}
-                    >
-                      <Button variant="outline" size="lg" className="px-8 capitalize">
-                        Load More {category}
-                      </Button>
-                    </motion.div>
-                  )}
+                  {/* Bottom sentinel for downscroll */}
+                  <div ref={bottomRef}>
+                    {isFetchingNextPage && (
+                      <p className="text-center">Loading more...</p>
+                    )}
+                  </div>
                 </>
             )}
           </motion.div>

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { PropertyType } from '@components/website/property/models';
-import IndexPageListing from '@components/website/property/IndexPageListing';
+import PropertyListingIndexPage from '@components/website/property/PropertyListingIndexPage';
 
 export default function LandsPage() {
 
   return (
-    <IndexPageListing propertyType={PropertyType.LAND} />
+    <PropertyListingIndexPage propertyType={PropertyType.LAND} />
   );
 };

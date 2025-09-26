@@ -58,7 +58,7 @@
 //   };
 //   verification: {
 //     veripropsVerified: boolean;
-//     titleDocs: string[];
+//     title_docs: string[];
 //     zoning: string;
 //     developmentStage: string;
 //   };
@@ -148,7 +148,7 @@
 //   },
 //   verification: {
 //     veripropsVerified: true,
-//     titleDocs: ["Certificate of Occupancy", "Survey Plan"],
+//     title_docs: ["Certificate of Occupancy", "Survey Plan"],
 //     zoning: "Residential",
 //     developmentStage: "Completed"
 //   },

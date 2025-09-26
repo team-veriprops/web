@@ -1,11 +1,15 @@
-
-import { MyForSaleComponent } from "@components/portal/my-for-sale/MyForSaleComponent";
+import { MyForSaleComponentPage } from "@components/portal/my-for-sale/MyForSaleComponentPage";
 import { Metadata } from "next";
+
+const title = "My For Sale";
+const description =
+  "Manage all your properties and services currently listed for sale. Track their status, update details, and monitor interest from buyers.";
+
 export const metadata: Metadata = {
-  title: "My For Sale | Veriprops",
-  description: "Manage your profile, security, notifications, and contract details",
+  title: `${title} | Veriprops`,
+  description: description,
 };
 
 export default function MyForSalePage() {
-  return <MyForSaleComponent />;
+  return <MyForSaleComponentPage title={title} description={description} />;
 }

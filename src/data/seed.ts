@@ -2438,11 +2438,11 @@ export const mockApi = {
     // console.log("Search results: ", results)
   
     // Apply filters
-    if (filters.priceMin) {
-      results = results.filter(item => item.price.getValue() >= filters.priceMin!);
+    if (filters.price_min) {
+      results = results.filter(item => item.price.getValue() >= filters.price_min!);
     }
-    if (filters.priceMax) {
-      results = results.filter(item => item.price.getValue() <= filters.priceMax!);
+    if (filters.price_max) {
+      results = results.filter(item => item.price.getValue() <= filters.price_max!);
     }
   
     // Category-specific filters

@@ -1,5 +1,5 @@
 import { format } from 'date-fns-tz';
-import { Measurement, Money, Property } from '@components/website/property/models';
+import { Measurement, Money, Property, QueryPropertyDto } from '@components/website/property/models';
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { redirect } from 'next/navigation';
@@ -46,6 +46,14 @@ export function isActivePath(key: string, pathname: string, other_links: string[
 }
 
 export const formatPrice = (price: Money) => {
+  console.log("formatPrice(price: Money): ", price)
+
+  if (!(price instanceof Money)) {
+    price = Money.from(price)
+
+  console.log("formatPrice(price: Money), After instance convertion: ", price)
+  }
+
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: price.getCurrency(),
@@ -55,11 +63,51 @@ export const formatPrice = (price: Money) => {
 };
 
 export const formatMeasurement = (measurement: Measurement) => {
+  console.log("formatMeasurement(measurement: Measurement): ", measurement)
+
   return measurement.value + " " + measurement.unit;
 }
+
+export const formatDate = (dateStr: string) => {
+  console.log("formatDate(dateStr: string): ", dateStr)
+
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
 export const handlePropertyViewDetails = (property: Property) => {
     redirect(`/properties/${property.type.toLowerCase()}s/${property.slug}`);
 };
 
 export const onLogoutRedirect = () => {redirect("/")}
+
+export const getSearchQuery = (searchKey: string, searchParams: any) => {
+  
+    // Gets search query from browser
+
+    const params = new URLSearchParams(searchParams);
+    const query = params.get(searchKey!)?.toLowerCase() ?? "";
+
+    return query
+}
+
+export function toQueryParams(payload: Object): string {
+  console.log("toQueryParams(payload: Object): ", payload)
+
+  const params = new URLSearchParams();
+
+  Object.entries(payload).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      params.append(key, String(value));
+    }
+  });
+
+  return params.toString();
+}
+
+export function getFirstPropertyPhoto(property: QueryPropertyDto): string {
+  return property.images?.[0]?.url ?? "/placeholder.jpg"
+}

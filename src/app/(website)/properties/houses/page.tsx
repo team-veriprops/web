@@ -1,12 +1,9 @@
-'use client'
+"use client";
 
-import React from 'react';
-import { PropertyType } from '@components/website/property/models';
-import IndexPageListing from '@components/website/property/IndexPageListing';
+import React from "react";
+import { PropertyType } from "@components/website/property/models";
+import PropertyListingIndexPage from "@components/website/property/PropertyListingIndexPage";
 
-export default function HousePage(){
-
-  return (
-    <IndexPageListing propertyType={PropertyType.HOUSE} />
-  );
-};
+export default function HousePage() {
+  return <PropertyListingIndexPage propertyType={PropertyType.HOUSE} />;
+}

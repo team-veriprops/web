@@ -3,17 +3,17 @@
 // Veriprops Property Card Component
 import React, { useState } from 'react';
 import { Heart, GitCompareArrows, MapPin, Bed, Maximize, Shield, Star, Eye, Share2, Bath } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useWishlist, useCompare, useToasts } from '@stores/useStore';
 import { Badge } from '@3rdparty/ui/badge';
 import { Button } from '@3rdparty/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@3rdparty/ui/avatar';
-import { Money, PropertyType, type Property } from '@components/website/property/models';
-import { formatPrice } from '@lib/utils';
+import { PropertyType, QueryPropertyDto } from '@components/website/property/models';
+import { formatPrice, getFirstPropertyPhoto } from '@lib/utils';
 
 interface PropertyCardProps {
-  property: Property;
-  onViewDetails?: (property: Property) => void;
+  property: QueryPropertyDto;
+  onViewDetails?: (property: QueryPropertyDto) => void;
   className?: string;
 }
 
@@ -29,14 +29,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   const { toggle: toggleCompare, isInCompare, canAdd } = useCompare();
   const { addToast } = useToasts();
 
-  const isWishlisted = isInWishlist(property.id);
-  const isInCompareList = isInCompare(property.id);
+  const isWishlisted = isInWishlist(property.id!);
+  const isInCompareList = isInCompare(property.id!);
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    toggleWishlist(property.id);
+    toggleWishlist(property.id!);
     
     if (isWishlisted) {
       addToast({
@@ -44,7 +44,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         message: `${property.title} removed from wishlist`,
         action: {
           label: 'Undo',
-          onClick: () => toggleWishlist(property.id)
+          onClick: () => toggleWishlist(property.id!)
         }
       });
     } else {
@@ -64,7 +64,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       return;
     }
     
-    toggleCompare(property.id);
+    toggleCompare(property.id!);
     
     if (isInCompareList) {
       addToast({
@@ -103,7 +103,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       <div className="relative overflow-hidden rounded-t-xl aspect-[4/3]">
         {!imageError ? (
           <img
-            src={property.images[0].url}
+            src={getFirstPropertyPhoto(property)}
             alt={property.title}
             className={`property-card-image w-full h-full object-cover transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'

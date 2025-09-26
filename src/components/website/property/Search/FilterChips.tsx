@@ -18,17 +18,17 @@ export function FilterChips({ filters, onRemove, onClearAll }: FilterChipsProps)
   const chips = [];
 
   // Price chip
-  if (filters.priceMin || filters.priceMax) {
+  if (filters.price_min || filters.price_max) {
     // const localFormatPrice = (price: number) => `₦${(price / 1000000).toFixed(0)}M`;
     const localFormatPrice = (price: number) => formatPrice(Money.from({value: price, currency: settings.currency}));
     let priceText = '';
     
-    if (filters.priceMin && filters.priceMax) {
-      priceText = `${localFormatPrice(filters.priceMin)} - ${localFormatPrice(filters.priceMax)}`;
-    } else if (filters.priceMin) {
-      priceText = `${localFormatPrice(filters.priceMin)}+`;
+    if (filters.price_min && filters.price_max) {
+      priceText = `${localFormatPrice(filters.price_min)} - ${localFormatPrice(filters.price_max)}`;
+    } else if (filters.price_min) {
+      priceText = `${localFormatPrice(filters.price_min)}+`;
     } else {
-      priceText = `Up to ${localFormatPrice(filters.priceMax)}`;
+      priceText = `Up to ${localFormatPrice(filters.price_max)}`;
     }
     
     chips.push({
@@ -94,15 +94,15 @@ export function FilterChips({ filters, onRemove, onClearAll }: FilterChipsProps)
   }
 
   // Title docs chip
-  if (filters.titleDocs && filters.titleDocs.length > 0) {
-    const label = filters.titleDocs.length === 1 
-      ? filters.titleDocs[0]
-      : `${filters.titleDocs.length} title docs`;
+  if (filters.title_docs && filters.title_docs.length > 0) {
+    const label = filters.title_docs.length === 1 
+      ? filters.title_docs[0]
+      : `${filters.title_docs.length} title docs`;
     
     chips.push({
-      key: 'titleDocs',
+      key: 'title_docs',
       label,
-      onRemove: () => onRemove('titleDocs')
+      onRemove: () => onRemove('title_docs')
     });
   }
 

@@ -1,4 +1,5 @@
 import { PropertyAssetPhotoCategory } from "@components/website/property/PropertyDetails/models";
+import { BaseQueryDto, PageRequest } from "types/models";
 
 export enum TransactionCurrency {
   NGN = "NGN",
@@ -7,9 +8,9 @@ export enum TransactionCurrency {
   GBP = "GBP",
 }
 
-export enum Language{
-	ENGLISH = "en-US",
-	FRENCH = "FR"
+export enum Language {
+  ENGLISH = "en-US",
+  FRENCH = "FR",
 }
 
 export class Money {
@@ -102,101 +103,97 @@ export class Money {
   }
 }
 
-export interface Measurement{
-    value: number;
-    unit: MeasurementUnit
+export interface Measurement {
+  value: number;
+  unit: MeasurementUnit;
 }
 
 export enum MeasurementUnit {
-    METER = "meter",
-    SQM = "sqm",
-    FEET = "feet",
-    SQF = "sqf"
+  METER = "meter",
+  SQM = "sqm",
+  FEET = "feet",
+  SQF = "sqf",
 }
 
-export enum PropertyZoning{
-     RESIDENTIAL = "residential",
-     COMMERCIAL = "commercial",
-     MIXED = "mixed",
-     AGRICULTURAL = "agricultural",
-     INDUSTRIAL = "industrial"
+export enum PropertyZoning {
+  RESIDENTIAL = "residential",
+  COMMERCIAL = "commercial",
+  MIXED = "mixed",
+  AGRICULTURAL = "agricultural",
+  INDUSTRIAL = "industrial",
 }
 
 export enum HomeType {
-    APARTMENT = "apartment",
-    DUPLEX = "duplex",
-    BUNGALOW = "bungalow",
-    TERRACE = "terrace",
-    DETACHED = "detached",
-    SEMI_DETACHED = "semiDetached",
-    MANSION = "mansion",
-    SHORTLET = "shortlet",
+  APARTMENT = "apartment",
+  DUPLEX = "duplex",
+  BUNGALOW = "bungalow",
+  TERRACE = "terrace",
+  DETACHED = "detached",
+  SEMI_DETACHED = "semiDetached",
+  MANSION = "mansion",
+  SHORTLET = "shortlet",
 }
 
 export enum LandType {
-    RESIDENTIAL = "residential",
-    COMMERCIAL = "commercial",
-    AGRICULTURAL = "agricultural",
-    INDUSTRIAL = "industrial",
-    MIXED = "mixed",
-    ALLOCATION = "allocation",
-    ESTATE_PLOT = "estatePlot",
-    WATER_FRONT = "waterfront",
-    CORNER_PIECE = "cornerPiece"
+  RESIDENTIAL = "residential",
+  COMMERCIAL = "commercial",
+  AGRICULTURAL = "agricultural",
+  INDUSTRIAL = "industrial",
+  MIXED = "mixed",
+  ALLOCATION = "allocation",
+  ESTATE_PLOT = "estatePlot",
+  WATER_FRONT = "waterfront",
+  CORNER_PIECE = "cornerPiece",
 }
 
-export enum PropertyType{
-    LAND = "land",
-    HOUSE = "house",
-    SERVICE = "service"
+export enum PropertyType {
+  LAND = "land",
+  HOUSE = "house",
+  SERVICE = "service",
 }
 
-export enum RoadState{
-   PAVED = "paved",
-   UNPAVED = "unpaved"
+export enum RoadState {
+  PAVED = "paved",
+  UNPAVED = "unpaved",
 }
 
-export enum LandTitle{
-    C_OF_O = "C of O",
-    GOVERNOR_CONSENT = "Governor's Consent",
-    DEED_OF_ASSIGNMENT = "Deed of Assignment",
-    GAZETTE = "Gazette",
-    EXCISION = "Excision",
-    SURVEY_PLAN = "Survey Plan",
-    REGISTERED_TITLE = "Registered Title"
+export enum LandTitle {
+  C_OF_O = "C of O",
+  GOVERNOR_CONSENT = "Governor's Consent",
+  DEED_OF_ASSIGNMENT = "Deed of Assignment",
+  GAZETTE = "Gazette",
+  EXCISION = "Excision",
+  SURVEY_PLAN = "Survey Plan",
+  REGISTERED_TITLE = "Registered Title",
 }
 
-export enum PropertyStage{
-    COMPLETED = "Completed",
-    CLEARED = "Cleared",
-    FENCED = "Fenced",
-    BARE_LAND = "Bare land",
-    GATED_ESTATE = "Gated estate",
+export enum PropertyStage {
+  COMPLETED = "Completed",
+  CLEARED = "Cleared",
+  FENCED = "Fenced",
+  BARE_LAND = "Bare land",
+  GATED_ESTATE = "Gated estate",
 }
 
-export enum ImageCategory{
-
+export interface NearbyPlaces {
+  schools: Array<{ name: string; distance: Measurement }>;
+  hospitals: Array<{ name: string; distance: Measurement }>;
+  places: Array<{ name: string; distance: Measurement }>;
+  transit: Array<{ name: string; distance: Measurement }>;
 }
 
-export interface NearbyPlaces{
-    schools: Array<{ name: string; distance: Measurement }>;
-    hospitals: Array<{ name: string; distance: Measurement }>;
-    places: Array<{ name: string; distance: Measurement }>;
-    transit: Array<{ name: string; distance: Measurement }>;
-}
-
-export interface Image{
+export interface Image {
   title?: string;
   url: string;
-  category: PropertyAssetPhotoCategory
+  category?: PropertyAssetPhotoCategory;
 }
 
 export interface BaseProperty {
-  id: string;
   slug: string;
   title: string;
   short_description: string;
-  description?: string;
+  description: string;
+  type: PropertyType;
   images: Image[];
   // title_docs: LandTitle[];
   price: Money;
@@ -210,6 +207,7 @@ export interface BaseProperty {
     country: string;
     state: string;
     city: string;
+    grouping_city: string;
     area: string;
     coordinates?: { lat: number; lng: number };
   };
@@ -219,7 +217,7 @@ export interface BaseProperty {
     road: RoadState;
     drainage: boolean;
     waste_disposal: boolean;
-    internet: boolean
+    internet: boolean;
   };
   verification?: {
     verified: boolean;
@@ -235,7 +233,6 @@ export interface BaseProperty {
 
 /** House-specific */
 export interface HouseProperty extends BaseProperty {
-  type: PropertyType.HOUSE;
   home_type: HomeType;
   bedrooms: number;
   bathrooms: number;
@@ -267,17 +264,16 @@ export interface HouseProperty extends BaseProperty {
     covered: boolean;
     street: boolean;
   };
-  amenities?: string[]
+  amenities?: string[];
 }
 
 /** Land-specific */
 export interface LandProperty extends BaseProperty {
-  type: PropertyType.LAND;
   land_type: LandType;
 }
 
 /** Unified Property type */
-export type Property = HouseProperty | LandProperty;
+export interface Property extends HouseProperty, LandProperty{}
 
 export interface Service {
   id: string;
@@ -300,19 +296,31 @@ export interface User {
 }
 
 export type CommonFilters = {
-  priceMin?: number;
-  priceMax?: number;
+  price_min?: number;
+  price_max?: number;
   development_stage?: PropertyStage[];
-  sort: 'recommended' | 'newest' | 'priceAsc' | 'priceDesc' | 'plotSize' | 'lotSize' | 'pricePerSqm';
-  layout: 'split' | 'map' | 'grid' | 'list';
-  titleDocs?: string[];
-  utilities?: { electricity?: boolean; water?: boolean; road?: RoadState; drainage?: boolean };
+  sort:
+    | "recommended"
+    | "newest"
+    | "priceAsc"
+    | "priceDesc"
+    | "plotSize"
+    | "lotSize"
+    | "pricePerSqm";
+  layout: "split" | "map" | "grid" | "list";
+  title_docs?: string[];
+  utilities?: {
+    electricity?: boolean;
+    water?: boolean;
+    road?: RoadState;
+    drainage?: boolean;
+  };
   proximity?: { categories: string[]; distanceKm: number };
   zoning?: Array<PropertyZoning>;
 };
 
 export type HouseFilters = CommonFilters & {
-  bedrooms?: { min?: number; max?: number } | 'any' | 'studio';
+  bedrooms?: { min?: number; max?: number } | "any" | "studio";
   bathrooms?: 1 | 1.5 | 2 | 2.5 | 3 | 4 | 0; // 0 means Any
   home_types?: Array<HomeType>;
 };
@@ -322,3 +330,131 @@ export type LandFilters = CommonFilters & {
 };
 
 export type PropertyFilters = HouseFilters | LandFilters;
+
+
+
+
+
+
+
+
+
+
+
+
+// Enums
+export enum PropertyStatus {
+  CREATED = "created",
+  COMING_SOON = "coming soon",
+  NEW_LISTING = "new listing",
+  UNDER_OFFER = "under offer",
+  SOLD = "sold",
+}
+
+export enum VerificationStatus {
+  PENDING = "pending",
+  VERIFIED = "verified",
+  REJECTED = "rejected",
+}
+
+// Base Interfaces
+export interface PropertyBaseDto {
+  title: string;
+  description: string;
+}
+
+// Create DTO
+export interface CreatePropertyDto extends PropertyBaseDto {}
+
+// Update DTO (full override)
+export interface UpdatePropertyDto extends PropertyBaseDto {}
+
+// Partial Update DTO
+export interface PartialUpdatePropertyDto {
+  status?: PropertyStatus | null;
+  old_status?: PropertyStatus | null;
+  active?: boolean | null;
+  date_first_activated?: Date | null;
+  notes?: string | null;
+  verification_status?: VerificationStatus | null;
+}
+
+// // Paging + Query Base (assuming these exist in your codebase)
+// export interface PageRequest {
+//   page?: number;
+//   size?: number;
+// }
+
+// export interface BaseQueryDto {
+//   sortBy?: string;
+//   sortOrder?: "asc" | "desc";
+// }
+
+// Search DTO
+export interface SearchPropertyDto extends PageRequest, BaseQueryDto {
+  title?: string | null;
+  description?: string | null;
+  user_id?: string | null;
+  status?: PropertyStatus | null;
+  type: PropertyType;
+  active?: boolean | null;
+  verification_status?: VerificationStatus | null;
+  grouping_city?: string;
+
+
+
+
+  price_min?: number;
+  price_max?: number;
+  development_stage?: PropertyStage[];
+  sort:
+    | "recommended"
+    | "newest"
+    | "priceAsc"
+    | "priceDesc"
+    | "plotSize"
+    | "lotSize"
+    | "pricePerSqm";
+  layout: "split" | "map" | "grid" | "list";
+  title_docs?: string[];
+  utilities?: {
+    electricity?: boolean;
+    water?: boolean;
+    road?: RoadState;
+    drainage?: boolean;
+  };
+  proximity?: { categories: string[]; distanceKm: number };
+  zoning?: Array<PropertyZoning>;
+  
+  bedrooms?: { min?: number; max?: number } | "any" | "studio";
+  bathrooms?: 1 | 1.5 | 2 | 2.5 | 3 | 4 | 0; // 0 means Any
+  home_types?: Array<HomeType>;
+  
+  land_types?: Array<LandType>;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Query DTO (combination of Create + PartialUpdate + BaseQuery)
+export interface QueryPropertyDto
+  extends CreatePropertyDto,
+    PartialUpdatePropertyDto,
+    BaseQueryDto, Property {}
+
+export interface QueryPropertyDetailsDto extends QueryPropertyDto {}
+
+
+export interface QueryCityGroupedPropertiesDto {
+  city: string;
+  properties: Property[];
+}

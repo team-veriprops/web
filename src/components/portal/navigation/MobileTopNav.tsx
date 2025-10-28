@@ -25,7 +25,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@3rdparty/ui/sheet";
 import Link from "next/link";
 import TopNav from "./TopNav";
-import CompanySwitcher from "./CompanySwitcher";
+import CompanySwitcher from "../company/CompanySwitcher";
 
 export default function MobileTopNav() {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);

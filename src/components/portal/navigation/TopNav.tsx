@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import {
   Bell,
-  Search,
   User,
   HelpCircle,
   Settings,
   LogOut,
   GitCompareArrows,
   Heart,
+  Dot,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@3rdparty/ui/button";
 import {
@@ -20,18 +20,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@3rdparty/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@3rdparty/ui/sheet";
 import { onLogoutRedirect } from "@lib/utils";
 import { redirect } from "next/navigation";
 import { Badge } from "@components/3rdparty/ui/badge";
 import { Separator } from "@components/3rdparty/ui/separator";
 import { motion } from "framer-motion";
 import { useUI, useWishlist, useCompare } from "@stores/useStore";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@components/3rdparty/ui/tooltip";
+import ToolTipComponent from "@components/ui/ToolTipComponent";
+import NotificationComponent from "@components/ui/NotificationComponent";
 
 export default function TopNav() {
   // const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -40,9 +42,9 @@ export default function TopNav() {
   const compareItems = useCompare((state) => state.items);
 
   const notifications = [
-    { id: 1, title: "Design phase completed", time: "2h ago", type: "success" },
-    { id: 2, title: "Invoice #1001 is due", time: "1d ago", type: "warning" },
-    { id: 3, title: "New message from team", time: "3h ago", type: "info" },
+    { id: "1", title: "Design phase completed", time: "2h ago", type: "success" },
+    { id: "2", title: "Invoice #1001 is due", time: "1d ago", type: "warning" },
+    { id: "3", title: "New message from team", time: "3h ago", type: "info" },
   ];
 
   const handleCompareClick = () => {
@@ -107,44 +109,7 @@ export default function TopNav() {
       </motion.button>
 
       {/* Notifications */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative">
-            <Bell className="h-5 w-5" />
-            {notifications.length > 0 && (
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                {notifications.length}
-              </Badge>
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-80">
-          <div className="p-4">
-            <h4 className="font-medium mb-2">Notifications</h4>
-            <Separator className="mb-6" />
-
-            <div className="space-y-2">
-              {notifications.length > 0 ? (
-                notifications.map((notification) => (
-                  <div
-                    key={notification.id}
-                    className="p-2 hover:bg-accent rounded-lg"
-                  >
-                    <p className="text-sm">{notification.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {notification.time}
-                    </p>
-                  </div>
-                ))
-              ) : (
-                <div>
-                  <p className="text-sm">No new notifications</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <NotificationComponent notifications={notifications} />
 
       {/* Profile */}
       <DropdownMenu>

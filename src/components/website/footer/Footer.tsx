@@ -58,9 +58,9 @@ const Footer = () => {
   ];
 
   const workWithUsLinks = [
-    { text: 'As a Content Creator/Influencer', href: '#' },
-    { text: 'As an Affiliate Partner', href: '#' },
-    { text: 'As a Property Consultant', href: '#' }
+    { text: 'As a Content Creator/Influencer', href: '/trust-network' },
+    { text: 'As an Affiliate Partner', href: '/trust-network' },
+    { text: 'As a Property Consultant', href: '/trust-network' }
   ];
 
   const quickLinks = [

@@ -21,10 +21,10 @@ export async function GET(
 
   // Apply filters
   let filtered = properties
-    .filter((p) => p.type.toLowerCase() === property?.type.toLowerCase())
+    .filter((p) => p.type?.toLowerCase() === property?.type?.toLowerCase()!)
     .sort(
       (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime()
     );
 
   // Pagination
@@ -34,7 +34,7 @@ export async function GET(
 
   // Page response
   const pageResponse = {
-    data: paginated as QueryPropertyDto[],
+    items: paginated as QueryPropertyDto[],
     page,
     page_size,
     total_pages: Math.ceil(total / page_size),

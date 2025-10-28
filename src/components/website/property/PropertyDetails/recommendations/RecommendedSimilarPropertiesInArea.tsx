@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
 import { QueryPropertyDto } from "../../models";
 import { PropertyCard } from "../../PropertyCard";
-import { usePropertyQueries } from "../../usePropertyQueries";
+import { usePropertyQueries } from "../../libs/usePropertyQueries";
 import { usePropertyStore } from "../../_usePropertyStore";
+import InfiniteScrollTriggerComponent from "@components/ui/InfiniteScrollTriggerComponent";
 
 export default function RecommendedSimilarPropertiesInArea() {
   const { currentProperty } = usePropertyStore();
@@ -21,39 +22,12 @@ export default function RecommendedSimilarPropertiesInArea() {
     status,
   } = useRecommendedSimilarPropertiesInfinite(currentProperty?.slug!);
 
-  const topRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  // Forward (down) scroll
-  useEffect(() => {
-    if (!bottomRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasNextPage) {
-        fetchNextPage();
-      }
-    });
-    observer.observe(bottomRef.current);
-    return () => observer.disconnect();
-  }, [bottomRef.current, hasNextPage, fetchNextPage]);
-
-  // Backward (up) scroll
-  useEffect(() => {
-    if (!topRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasPreviousPage) {
-        fetchPreviousPage();
-      }
-    });
-    observer.observe(topRef.current);
-    return () => observer.disconnect();
-  }, [topRef.current, hasPreviousPage, fetchPreviousPage]);
-
   if (status === "pending") return <p>Loading similar properties...</p>;
   if (status === "error") return <p>Failed to load similar properties.</p>;
 
   // Flatten results
   const properties: QueryPropertyDto[] =
-    data?.pages.flatMap((page) => page.data) ?? [];
+    data?.pages.flatMap((page) => page.items) ?? [];
 
   return (
     <motion.section
@@ -71,15 +45,6 @@ export default function RecommendedSimilarPropertiesInArea() {
         </p>
       </div>
 
-      {/* Top sentinel */}
-      <div ref={topRef}>
-        {isFetchingPreviousPage && (
-          <p className="text-center text-sm text-muted-foreground">
-            Loading previous...
-          </p>
-        )}
-      </div>
-
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {properties.map((property, index) => (
           <div key={index} className="flex-shrink-0 md:w-75 2xl:w-80">
@@ -91,14 +56,11 @@ export default function RecommendedSimilarPropertiesInArea() {
         ))}
       </div>
 
-      {/* Bottom sentinel */}
-      <div ref={bottomRef}>
-        {isFetchingNextPage && (
-          <p className="text-center text-sm text-muted-foreground">
-            Loading more...
-          </p>
-        )}
-      </div>
+      <InfiniteScrollTriggerComponent
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+      />
     </motion.section>
   );
 }

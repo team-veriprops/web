@@ -15,7 +15,7 @@ import { CityPropertyGroup } from '@components/website/property/CityPropertyGrou
 import PreFooterNavigation from '@components/website/footer/PreFooterNavigation';
 import Footer from '@components/website/footer/Footer';
 import { useWishlist, useCompare, useUI } from '@stores/useStore';
-import { mockApi } from 'data/seed';
+// import { mockApi } from 'data/seed';
 import { type Property, type Service } from '@components/website/property/models';
 import { ServiceCard } from '@components/website/ServiceCard';
 
@@ -58,11 +58,11 @@ export default function ServicesPage() {
       setLoading(true);
       setError(null);
       
-      const [servicesData] = await Promise.all([
-        mockApi.getServices()
-      ]);
+      // const [servicesData] = await Promise.all([
+      //   // mockApi.getServices()
+      // ]);
       
-      setServices(servicesData);
+      // setServices(servicesData);
     } catch (err) {
       setError('Failed to load data. Please try again.');
       console.error('Error loading data:', err);

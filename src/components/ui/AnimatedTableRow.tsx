@@ -8,6 +8,8 @@ interface AnimatedTableRowProps {
   index: number;
   elementOfInterest?: string | null;
   children: ReactNode;
+  isClickable?: boolean;
+  onClick?: () => void
 }
 
 export function AnimatedTableRow({
@@ -15,6 +17,8 @@ export function AnimatedTableRow({
   index,
   elementOfInterest,
   children,
+  isClickable,
+  onClick
 }: AnimatedTableRowProps) {
   return (
     <motion.tr
@@ -26,7 +30,8 @@ export function AnimatedTableRow({
         scale: elementOfInterest === id ? 0.95 : 1,
       }}
       transition={{ delay: index * 0.05 }}
-      className="hover:bg-muted/50 transition-colors"
+      onClick={onClick}
+      className={`hover:bg-muted/30 transition-colors ${isClickable?? false ? "cursor-pointer" : ""}`}
     >
       {children}
     </motion.tr>

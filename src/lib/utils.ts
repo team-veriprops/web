@@ -1,8 +1,17 @@
-import { format } from 'date-fns-tz';
-import { Measurement, Money, Property, QueryPropertyDto } from '@components/website/property/models';
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-import { redirect } from 'next/navigation';
+import { format } from "date-fns-tz";
+import {
+  Measurement,
+  Money,
+  Property,
+  QueryPropertyDto,
+} from "@components/website/property/models";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { redirect } from "next/navigation";
+import {
+  QueryReferralUserDto,
+  QueryReferralUserStatsDto,
+} from "@components/trust-network/referrer/referrals/models";
 
 /**
  * Combines multiple class name values into a single string,
@@ -23,84 +32,87 @@ import { redirect } from 'next/navigation';
  * @returns {string} - A single, space-separated, conflict-resolved string of class names.
  */
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 // export const isActivePath = (path: string, pathname: string) => {
 //   return pathname.startsWith(path)
 // };
 
-export function isActivePath(key: string, pathname: string, other_links: string[]): boolean {
+export function isActivePath(
+  key: string,
+  pathname: string,
+  other_links: string[]
+): boolean {
   // 1. Check direct match (pathname starts with key)
   if (pathname.startsWith(key)) {
     return true;
   }
 
   // 2. Check other_links match
-  const keyLast = key.substring(key.lastIndexOf('/')); // e.g. "/lands"
+  const keyLast = key.substring(key.lastIndexOf("/")); // e.g. "/lands"
   return other_links.some((link) => {
-    const linkLast = link.substring(link.lastIndexOf('/')); // e.g. "/lands"
+    const linkLast = link.substring(link.lastIndexOf("/")); // e.g. "/lands"
     // console.log("pathname: ", pathname, ", key: ", key, ", link: ", link, ", linkLast: ", linkLast, ", keyLast: ", keyLast )
     return pathname.startsWith(link) && linkLast === keyLast;
   });
 }
 
-export const formatPrice = (price: Money) => {
-  console.log("formatPrice(price: Money): ", price)
-
-  if (!(price instanceof Money)) {
-    price = Money.from(price)
-
-  console.log("formatPrice(price: Money), After instance convertion: ", price)
+export const convertMoney = (money: Money): Money => {
+  if (!(money instanceof Money)) {
+    money = Money.from(money);
   }
+  return money;
+};
 
-    return new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: price.getCurrency(),
+export const formatMoney = (money: Money) => {
+  money = convertMoney(money);
+
+  if (money)
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: money.getCurrency(),
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(price.getValue());
+    }).format(money.getValue());
 };
 
 export const formatMeasurement = (measurement: Measurement) => {
-  console.log("formatMeasurement(measurement: Measurement): ", measurement)
+  // console.log("formatMeasurement(measurement: Measurement): ", measurement)
 
   return measurement.value + " " + measurement.unit;
-}
-
-export const formatDate = (dateStr: string) => {
-  console.log("formatDate(dateStr: string): ", dateStr)
-
-    return new Date(dateStr).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-export const handlePropertyViewDetails = (property: Property) => {
-    redirect(`/properties/${property.type.toLowerCase()}s/${property.slug}`);
 };
 
-export const onLogoutRedirect = () => {redirect("/")}
+export const handlePropertyViewDetails = (property: QueryPropertyDto) => {
+  redirect(`/properties/${property?.type?.toLowerCase()}s/${property.slug}`);
+};
+
+export const onLogoutRedirect = () => {
+  redirect("/");
+};
 
 export const getSearchQuery = (searchKey: string, searchParams: any) => {
-  
-    // Gets search query from browser
+  // Gets search query from browser
 
-    const params = new URLSearchParams(searchParams);
-    const query = params.get(searchKey!)?.toLowerCase() ?? "";
+  const params = new URLSearchParams(searchParams);
+  const query = params.get(searchKey!)?.toLowerCase() ?? "";
 
-    return query
-}
+  return query;
+};
 
 export function toQueryParams(payload: Object): string {
-  console.log("toQueryParams(payload: Object): ", payload)
-
   const params = new URLSearchParams();
 
   Object.entries(payload).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
+    if (value === undefined || value === null) return;
+
+    if (Array.isArray(value)) {
+      // append each array item separately
+      value.forEach((v) => params.append(key, String(v)));
+    } else if (typeof value === "object") {
+      // stringify objects (e.g. ranges, filters)
+      params.append(key, JSON.stringify(value));
+    } else {
       params.append(key, String(value));
     }
   });
@@ -109,5 +121,67 @@ export function toQueryParams(payload: Object): string {
 }
 
 export function getFirstPropertyPhoto(property: QueryPropertyDto): string {
-  return property.images?.[0]?.url ?? "/placeholder.jpg"
+  return property.images?.[0]?.url ?? "/placeholder.jpg";
+}
+
+export const stringifyFilters = (filters: Record<string, unknown>) => {
+  if (!filters) return {};
+  return Object.fromEntries(
+    Object.entries(filters).map(([key, value]) => [
+      key,
+      typeof value === "object" ? JSON.stringify(value) : String(value),
+    ])
+  );
+};
+
+export const handleToggleSort = (
+  key: string,
+  orderBy: string,
+  updateOrderByInStore: (orderBy: string) => void
+) => {
+  let newOrderBy: string;
+
+  if (orderBy) {
+    const [sortKey, currentOrder = "asc"] = orderBy.split(" ");
+
+    if (sortKey === key) {
+      const nextOrder = currentOrder === "asc" ? "desc" : "asc";
+      newOrderBy = `${sortKey} ${nextOrder}`;
+    } else {
+      newOrderBy = `${key} asc`;
+    }
+  } else {
+    newOrderBy = `${key} asc`;
+  }
+
+  updateOrderByInStore(newOrderBy);
+};
+
+export async function copyToClipboard(text: string): Promise<void> {
+  if (navigator.clipboard && window.isSecureContext) {
+    return await navigator.clipboard.writeText(text);
+  } else {
+    // fallback for older browsers
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed"; // avoid scrolling to bottom
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+    return Promise.resolve();
+  }
+}
+
+export function buildPath(
+  template: string,
+  params: Record<string, string>
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key) => params[key] ?? "");
+}
+
+export function buildReferralLink(referralCode: string) {
+  return `${window.location.origin}/signup?ref=${referralCode}`;
 }

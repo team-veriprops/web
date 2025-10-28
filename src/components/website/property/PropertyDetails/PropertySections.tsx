@@ -7,11 +7,11 @@ import { Card } from '@3rdparty/ui/card';
 import { Badge } from '@3rdparty/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@3rdparty/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@3rdparty/ui/tabs';
-import { PropertyType, type Property } from '@components/website/property/models';
-import { formatMeasurement, formatPrice } from '@lib/utils';
+import { PropertyType, QueryPropertyDto } from '@components/website/property/models';
+import { formatMeasurement, formatMoney } from '@lib/utils';
 
 interface PropertySectionsProps {
-  property: Property;
+  property: QueryPropertyDto;
 }
 
 export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) => {
@@ -51,13 +51,13 @@ export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) 
                   <Dot size={40} className='inline text-accent-strong' />
                   For Sale
                 </h2>
-                <p className="text-3xl font-bold text-primary">{formatPrice(property.price)}</p>
+                <p className="text-3xl font-bold text-primary">{formatMoney(property?.price!)}</p>
               </div>
               
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-muted-foreground">Plot size</span>
-                  <p className="font-medium">{formatMeasurement(property.plot_size)}</p>
+                  <p className="font-medium">{formatMeasurement(property?.plot_size!)}</p>
                 </div>
 
                 { property.type === PropertyType.HOUSE && (<>
@@ -85,7 +85,7 @@ export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) 
               
               <div>
                 <span className="text-muted-foreground text-sm">Address</span>
-                <p className="font-medium">{property.location.address}</p>
+                <p className="font-medium">{property?.location?.address}</p>
               </div>
 
               <Badge variant="secondary" className="mb-6 absolute top-1 right-1">
@@ -158,7 +158,7 @@ export const PropertySections: React.FC<PropertySectionsProps> = ({ property }) 
             </div>
             <div className="text-center p-4 bg-muted/50 rounded-lg">
               <Ruler className="h-6 w-6 text-primary mx-auto mb-2" />
-              <p className="font-semibold text-foreground">{formatPrice(property.price_per_sqm)}</p>
+              <p className="font-semibold text-foreground">{formatMoney(property?.price_per_sqm!)}</p>
               <p className="text-sm text-muted-foreground">Price per sqm</p>
             </div>
           </div>

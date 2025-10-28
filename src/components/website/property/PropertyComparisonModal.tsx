@@ -5,6 +5,7 @@ import { useUI } from "@stores/useStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBodyOverflowHidden } from "@hooks/useBodyOverflowHidden";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function PropertyComparisonModal() {
  const [type, setType] = useState<"houses" | "lands">("houses");
@@ -167,7 +168,7 @@ const attributes = [
                     className="sticky top-0 z-10 bg-white border-b border-r"
                   >
                     <div className="relative">
-                      <img
+                      <Image
                         src={p.image}
                         alt={p.title}
                         className="w-full h-32 object-cover"

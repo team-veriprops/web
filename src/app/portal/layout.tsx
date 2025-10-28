@@ -1,23 +1,22 @@
 "use client";
 
 import "@app/globals.css";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useIsMobile } from "@hooks/use-mobile";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import Breadcrumbs from "@components/portal/navigation/Breadcrumbs";
 import DesktopSidebar from "@components/portal/navigation/DesktopSidebar";
 import MobileTopNav from "@components/portal/navigation/MobileTopNav";
 import OnboardingModal from "@components/portal/onboarding/OnboardingModal";
 import { MobileBottomNav } from "@components/website/Navigation";
-import DesktopTopNav from "@components/portal/navigation/TopNav";
 import TopNav from "@components/portal/navigation/TopNav";
-
-// export const metadata: Metadata = {
-//   title: "Veriprops Portal",
-//   description: "Trusted marketplace for verified properties",
-// };
+import { useAuthQueries } from "@components/user/auth/libs/useAuthQueries";
 
 export default function PortalLayout({ children }: { children: ReactNode }) {
+  // Get Auth Details
+  const { useGetAuth } = useAuthQueries();
+  useGetAuth();
+
   const pathname = usePathname();
   const isMobile = useIsMobile();
 

@@ -1,0 +1,155 @@
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@3rdparty/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@3rdparty/ui/popover";
+import { ChevronDown, Home, Building, Castle, Users } from "lucide-react";
+import { usePropertyQueryState } from "../../libs/usePropertyStore";
+import { HomeType } from "../../models";
+
+// interface HomeTypeFilterProps {
+//   selected?: string[];
+//   onChange: (types: string[]) => void;
+// }
+
+const homeTypes = [
+  { id: HomeType.APARTMENT, label: "Apartment/Flat", icon: Building },
+  { id: HomeType.DUPLEX, label: "Duplex", icon: Home },
+  { id: HomeType.BUNGALOW, label: "Bungalow", icon: Home },
+  { id: HomeType.TERRACE, label: "Terrace", icon: Home },
+  { id: HomeType.DETACHED, label: "Detached", icon: Home },
+  { id: HomeType.SEMI_DETACHED, label: "Semi-Detached", icon: Home },
+  { id: HomeType.MANSION, label: "Mansion/Luxury", icon: Castle },
+  { id: HomeType.SHORTLET, label: "Shortlet/Serviced", icon: Users },
+];
+
+export function HomeTypeFilter() {
+  const [filters, updateFilters] = usePropertyQueryState();
+  const [localSelected, setLocalSelected] = useState<HomeType[]>(
+    filters.home_types!
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const [displayText, setDisplayText] = useState<string>();
+
+  useEffect(() => {
+    setDisplayText(getDisplayText());
+  }, [JSON.stringify(filters.home_types)]);
+
+  const handleToggle = (typeId: HomeType) => {
+    setLocalSelected((prev) =>
+      prev.includes(typeId)
+        ? prev.filter((id) => id !== typeId)
+        : [...prev, typeId]
+    );
+  };
+
+  const handleDone = () => {
+    updateFilters({ home_types: localSelected });
+    setIsOpen(false);
+  };
+
+  const handleReset = () => {
+    setLocalSelected([]);
+    updateFilters({ home_types: [] });
+  };
+
+  const getDisplayText = () => {
+    if (filters?.home_types?.length === 0) {
+      handleReset();
+      return "Home type";
+    }
+    if (filters?.home_types?.length === 1) {
+      const type = homeTypes.find((t) => t.id === filters?.home_types?.[0]);
+      return type?.label || "Home type";
+    }
+    return `${filters?.home_types?.length} home types`;
+  };
+
+  return (
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="h-10 px-4 justify-between border-border hover:bg-muted/50"
+        >
+          <span className="font-medium">{displayText}</span>
+          <ChevronDown className="h-4 w-4 ml-2" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        className="w-96 p-6 bg-popover border border-border rounded-2xl shadow-2xl"
+        align="start"
+        sideOffset={8}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        >
+          <div className="space-y-6">
+            <h4 className="font-medium text-foreground">Home Type</h4>
+
+            <div className="grid grid-cols-2 gap-3">
+              {homeTypes.map((type) => {
+                const Icon = type.icon;
+                const isSelected = localSelected.includes(type.id);
+
+                return (
+                  <motion.div
+                    key={type.id}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button
+                      variant="outline"
+                      onClick={() => handleToggle(type.id)}
+                      className={`
+                        w-full  h-20 p-4 flex flex-col items-center justify-center gap-2
+                        border-2 transition-all duration-200
+                        ${
+                          isSelected
+                            ? "border-primary bg-primary/5 text-primary ring-2 ring-primary/20"
+                            : "border-border hover:border-muted-foreground"
+                        }
+                      `}
+                    >
+                      <Icon className="h-6 w-6" />
+                      <span className="text-sm font-medium text-center leading-tight">
+                        {type.label}
+                      </span>
+                      {/* {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center"
+                        >
+                          <div className="w-2 h-2 bg-primary-foreground rounded-full" />
+                        </motion.div>
+                      )} */}
+                    </Button>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-between pt-2">
+              <Button
+                variant="ghost"
+                onClick={handleReset}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                Reset
+              </Button>
+              <Button
+                onClick={handleDone}
+                className="bg-primary hover:bg-primary-hover"
+              >
+                Done
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      </PopoverContent>
+    </Popover>
+  );
+}

@@ -3,11 +3,11 @@ import { Phone, MessageCircle, HandCoins, DoorOpen } from 'lucide-react';
 import { Button } from '@3rdparty/ui/button';
 import { Card } from '@3rdparty/ui/card';
 import Link from 'next/link';
-import { Property, PropertyType } from '@components/website/property/models';
-import { formatMeasurement, formatPrice } from '@lib/utils';
+import { QueryPropertyDto, PropertyType } from '@components/website/property/models';
+import { formatMeasurement, formatMoney } from '@lib/utils';
 
 interface FloatingNavCardProps {
-  property: Property;
+  property: QueryPropertyDto;
 }
 
 export const FloatingNavCard: React.FC<FloatingNavCardProps> = ({ property }) => {
@@ -41,9 +41,9 @@ export const FloatingNavCard: React.FC<FloatingNavCardProps> = ({ property }) =>
         <div className="space-y-4">
           <div className="text-center">
             <p className="text-2xl font-bold text-primary">
-              {formatPrice(property.price)}
+              {formatMoney(property?.price!)}
             </p>
-            <p className="text-sm text-muted-foreground">{property.type === PropertyType.HOUSE &&  (property.bedrooms + " beds • " + property.bathrooms + " baths •")} {formatMeasurement(property.plot_size)}</p>
+            <p className="text-sm text-muted-foreground">{property.type === PropertyType.HOUSE &&  (property.bedrooms + " beds • " + property.bathrooms + " baths •")} {formatMeasurement(property?.plot_size!)}</p>
           </div>
 
           <div className="space-y-3">

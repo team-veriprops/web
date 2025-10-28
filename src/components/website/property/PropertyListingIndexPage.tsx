@@ -9,9 +9,10 @@ import {
   QueryCityGroupedPropertiesDto,
 } from "@components/website/property/models";
 import { handlePropertyViewDetails } from "@lib/utils";
-import { usePropertyQueries } from "./usePropertyQueries";
+import { usePropertyQueries } from "./libs/usePropertyQueries";
 import { Page } from "types/models";
-import { usePropertyStore } from "./usePropertyStore";
+import { usePropertyStore } from "./libs/usePropertyStore";
+import InfiniteScrollTriggerComponent from "@components/ui/InfiniteScrollTriggerComponent";
 
 export default function PropertyListingIndexPage({
   propertyType,
@@ -29,47 +30,20 @@ export default function PropertyListingIndexPage({
     isFetchingPreviousPage,
   } = useSearchCityGroupedPropertyInfinite();
 
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const topRef = useRef<HTMLDivElement>(null);
-
-  
-    // Sync filters with store
-    useEffect(() => {
-      usePropertyStore.getState().updateFilter('page_size', 2);
-    }, []);
-
-  // Downscroll
+  // Sync filters with store
   useEffect(() => {
-    if (!bottomRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasNextPage) fetchNextPage();
-    });
-    observer.observe(bottomRef.current);
-    return () => observer.disconnect();
-  }, [bottomRef.current, hasNextPage, fetchNextPage]);
-
-  // Upscroll
-  useEffect(() => {
-    if (!topRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && hasPreviousPage) fetchPreviousPage();
-    });
-    observer.observe(topRef.current);
-    return () => observer.disconnect();
-  }, [topRef.current, hasPreviousPage, fetchPreviousPage]);
+    usePropertyStore.getState().updateFilter("page_size", 2);
+  }, []);
 
   // Flatten city groups across all pages
   const allCityGroups: QueryCityGroupedPropertiesDto[] =
-    data?.pages.flatMap((page: Page<QueryCityGroupedPropertiesDto>) => page.data) ?? [];
+    data?.pages.flatMap(
+      (page: Page<QueryCityGroupedPropertiesDto>) => page.items
+    ) ?? [];
 
   return (
     <div className="min-h-screen bg-background">
       <main className="container mx-auto px-4 py-12">
-        {/* Top Sentinel */}
-        <div ref={topRef}>
-          {isFetchingPreviousPage && <p>Loading previous...</p>}
-        </div>
-
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -96,10 +70,11 @@ export default function PropertyListingIndexPage({
           ))}
         </motion.div>
 
-        {/* Bottom Sentinel */}
-        <div ref={bottomRef}>
-          {isFetchingNextPage && <p>Loading more...</p>}
-        </div>
+        <InfiniteScrollTriggerComponent
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+        />
       </main>
 
       {/* Bottom padding */}

@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Heart, Share2 } from "lucide-react";
 import { PropertyAssetPhotoCategory } from "./models";
-import { Image } from "@components/website/property/models";
+import { PropertyImage } from "@components/website/property/models";
 
 // type Photo = {
 //   url: string;
@@ -12,13 +12,13 @@ import { Image } from "@components/website/property/models";
 // };
 
 type Props = {
-  photos: Image[];
+  photos: PropertyImage[];
   initialIndex: number; // the index of the photo clicked from the grid
   initialCategory: PropertyAssetPhotoCategory;
   onClose: () => void;
 };
 
-const categories: Image["category"][] = [
+const categories: PropertyImage["category"][] = [
   PropertyAssetPhotoCategory.All,
   PropertyAssetPhotoCategory.Kitchen,
   PropertyAssetPhotoCategory.Bathroom,
@@ -33,7 +33,7 @@ const categories: Image["category"][] = [
 export default function PhotoGalleryModal({ photos, initialIndex, initialCategory, onClose }: Props) {
 
   // State for active tab and current index
-  const [activeCategory, setActiveCategory] = useState<Image["category"]>(initialCategory);
+  const [activeCategory, setActiveCategory] = useState<PropertyImage["category"]>(initialCategory);
 
   // Filtered photos based on tab
   const filteredPhotos = useMemo(() => {
@@ -43,7 +43,7 @@ export default function PhotoGalleryModal({ photos, initialIndex, initialCategor
   }, [activeCategory, photos]);
 
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-const [categoriesWithPhotos, setCategoriesWithPhotos] = useState<Image["category"][]>([PropertyAssetPhotoCategory.All]);
+const [categoriesWithPhotos, setCategoriesWithPhotos] = useState<PropertyImage["category"][]>([PropertyAssetPhotoCategory.All]);
 
 useEffect(() => {
   let withPhotos = categories.filter((category) => {
@@ -54,7 +54,7 @@ useEffect(() => {
   withPhotos = [...categoriesWithPhotos, ...withPhotos]
 
   setCategoriesWithPhotos(withPhotos);
-}, [categories, photos]);
+}, [categories, photos, categoriesWithPhotos]);
 
 
   // Navigation

@@ -8,7 +8,7 @@ interface CityPropertyGroupProps {
   city: string;
   properties: QueryPropertyDto[];
   type: PropertyType;
-  onViewDetails: (property: Property) => void;
+  onViewDetails: (property: QueryPropertyDto) => void;
 }
 
 export const CityPropertyGroup: React.FC<CityPropertyGroupProps> = ({

@@ -17,7 +17,7 @@ export async function GET(
   const property = properties.find((p) => p.slug === id);
 
     // Apply filters
-  let filtered = properties.filter((p) => p.type.toLowerCase() === property?.type);
+  let filtered = properties.filter((p) => p.type?.toLowerCase() === property?.type);
 
 
   // Pagination
@@ -27,7 +27,7 @@ export async function GET(
 
   // Page response
   const pageResponse = {
-    data: paginated as QueryPropertyDto[],
+    items: paginated as QueryPropertyDto[],
     page,
     page_size,
     total_pages: Math.ceil(total / page_size),

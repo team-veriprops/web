@@ -1,5 +1,6 @@
 "use client";
 
+import { Toaster } from "@components/3rdparty/ui/toaster";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { useState, useEffect } from "react";
@@ -31,6 +32,7 @@ export function ClientWrapperProvider({ children }: { children: React.ReactNode 
       disableTransitionOnChange
     >
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <Toaster />
     </ThemeProvider>
   );
 }

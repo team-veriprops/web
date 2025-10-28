@@ -9,26 +9,23 @@ import { useGlobalSettings } from "@stores/useGlobalSettings";
 
 interface ToolbarProps {
   searchPlaceholder: string;
-  children: ReactNode;
+  onSearchQueryChange: (searchQuery: string) => void;
+  children?: ReactNode;
 }
-export function TableToolbar({ searchPlaceholder = "Search...", children }: ToolbarProps) {
-  const {settings} = useGlobalSettings()
+export function TableToolbar({
+  searchPlaceholder = "Search...",
+  onSearchQueryChange,
+  children,
+}: ToolbarProps) {
+  const { settings } = useGlobalSettings();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
   const handleSearchTextChange = useDebouncedCallback((searchTerm) => {
     console.log(`Searching... ${searchTerm}`);
-   
-    const params = new URLSearchParams(searchParams);
-    if (searchTerm) {
-      params.set('query', searchTerm);
-    } else {
-      params.delete('query');
-    }
-    replace(`${pathname}?${params.toString()}`);
-   }, settings.searchDebounceSeconds);
-
+    onSearchQueryChange(searchTerm);
+  }, settings.searchDebounceSeconds);
 
   return (
     <div className="flex items-center justify-between gap-4 mb-6">
@@ -38,7 +35,7 @@ export function TableToolbar({ searchPlaceholder = "Search...", children }: Tool
         <Input
           type="search"
           placeholder={searchPlaceholder}
-          defaultValue={searchParams.get('query')?.toString()}
+          defaultValue={searchParams.get("query")?.toString()}
           onChange={(e) => handleSearchTextChange(e.target.value)}
           className="pl-10"
         />
@@ -48,4 +45,4 @@ export function TableToolbar({ searchPlaceholder = "Search...", children }: Tool
       {children}
     </div>
   );
-};
+}

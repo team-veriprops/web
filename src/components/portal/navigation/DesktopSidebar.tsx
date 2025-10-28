@@ -2,16 +2,25 @@
 
 import Link from "next/link";
 import { Separator } from "@3rdparty/ui/separator";
-import { LogOut, HelpCircle, Settings as SettingsIcon } from "lucide-react";
+import {
+  LogOut,
+  HelpCircle,
+  Settings as SettingsIcon,
+  ArrowRight,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { mainNavItems } from "./NavItems";
-import CompanySwitcher from "./CompanySwitcher";
+import CompanySwitcher from "../company/CompanySwitcher";
 import { onLogoutRedirect } from "@lib/utils";
 import BrandLogo from "@components/ui/BrandLogo";
+import { Button } from "@components/3rdparty/ui/button";
+import TrustNetworkOnboardingComponent from "@components/trust-network/onboarding/TrustNetworkOnboardingComponent";
+import { useTrustNetworkStore } from "@components/trust-network/libs/useTrustNetworkStore";
 
 export default function DesktopSidebar() {
   const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
+  const { setOpenLearnMore, setOpenOnboarding } = useTrustNetworkStore();
 
   return (
     <aside className="w-64 h-dvh border-r border-border bg-background fixed overflow-y-auto">
@@ -21,7 +30,9 @@ export default function DesktopSidebar() {
         </div>
 
         <Separator className="mb-6" />
-
+        <h3 className="font-bold text-sm text-muted-foreground/30">
+          BUYER / SELLER
+        </h3>
         <nav className="space-y-1 mb-8">
           {mainNavItems.map((item) => {
             const Icon = item.icon as any;
@@ -41,6 +52,32 @@ export default function DesktopSidebar() {
             );
           })}
         </nav>
+        <Separator className="mb-6" />
+        <h3 className=" font-bold text-sm text-muted-foreground/30">
+          TRUST NETWORK
+        </h3>
+        <div className="mt-2 mb-8">
+          <p className="text-sm text-muted-foreground mb-6">
+            Help make property deals safe & trusted - earn money.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={() => setOpenOnboarding(true)}
+              size="sm"
+              className="trust-gradient shadow-md hover:shadow-lg transition-all"
+            >
+              Join Now
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => setOpenLearnMore(true)}
+              variant="outline"
+              size="sm"
+            >
+              Learn more
+            </Button>
+          </div>
+        </div>
 
         <Separator className="mb-6" />
 
@@ -83,6 +120,9 @@ export default function DesktopSidebar() {
           <p className=" text-sm -mt-1.5 text-muted-foreground">verified properties</p>
         </div>
       </div> */}
+
+      {/* Modals */}
+      <TrustNetworkOnboardingComponent />
     </aside>
   );
 }

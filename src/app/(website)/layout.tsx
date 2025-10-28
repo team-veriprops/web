@@ -8,6 +8,7 @@ import { AuthModal } from "@components/user/auth/AuthModal";
 import { Suspense } from "react";
 import PreFooterNavigation from "@components/website/footer/PreFooterNavigation";
 import PropertyComparisonModal from "@components/website/property/PropertyComparisonModal";
+import MobileNavigationBottomPadding from "@components/ui/MobileNavigationBottomPadding";
 
 // export const metadata: Metadata = {
 //   title: "appodus - Strategic Tech Partner for Fast-Moving Startups",
@@ -35,8 +36,7 @@ export default function RootLayout({
         {/* Mobile Bottom Navigation */}
         <MobileBottomNav />
         
-        {/* Bottom Padding for Mobile Navigation */}
-        <div className="h-20 md:h-0" />
+        <MobileNavigationBottomPadding />
 
         <PropertyComparisonModal />
       </div>

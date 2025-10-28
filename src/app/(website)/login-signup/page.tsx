@@ -81,7 +81,7 @@ export default function Login() {
     //     options: {
     //       emailRedirectTo: `${window.location.origin}/`,
     //       data: {
-    //         full_name: formData.fullName
+    //         fullname: formData.fullName
     //       }
     //     }
     //   });

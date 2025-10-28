@@ -7,8 +7,9 @@ import { motion } from 'framer-motion';
 import { Badge } from '@3rdparty/ui/badge';
 import { Button } from '@3rdparty/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@3rdparty/ui/avatar';
-import { formatPrice } from '@lib/utils';
+import { formatMoney } from '@lib/utils';
 import { Service } from '@components/website/property/models';
+import Image from 'next/image';
 
 interface ServiceCardProps {
   service: Service;
@@ -48,7 +49,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       {/* Image Container */}
       <div className="relative overflow-hidden rounded-t-xl aspect-[4/3]">
         {!imageError ? (
-          <img
+          <Image
             src={service.images[0]}
             alt={service.title}
             className={`property-card-image w-full h-full object-cover transition-opacity duration-300 ${
@@ -120,7 +121,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         <div className="flex items-center justify-between pt-2 border-t border-border">
           <div className="flex flex-col">
             <span className="text-xl font-bold text-foreground">
-              {formatPrice(service.price)}
+              {formatMoney(service.price)}
             </span>
             <span className="text-xs text-muted-foreground">
               {service.duration}

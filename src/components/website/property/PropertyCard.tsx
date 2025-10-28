@@ -9,7 +9,8 @@ import { Badge } from '@3rdparty/ui/badge';
 import { Button } from '@3rdparty/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@3rdparty/ui/avatar';
 import { PropertyType, QueryPropertyDto } from '@components/website/property/models';
-import { formatPrice, getFirstPropertyPhoto } from '@lib/utils';
+import { formatMoney, getFirstPropertyPhoto } from '@lib/utils';
+import Image from 'next/image';
 
 interface PropertyCardProps {
   property: QueryPropertyDto;
@@ -102,9 +103,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       {/* Image Container */}
       <div className="relative overflow-hidden rounded-t-xl aspect-[4/3]">
         {!imageError ? (
-          <img
+          <Image
             src={getFirstPropertyPhoto(property)}
-            alt={property.title}
+            alt={property.title!}
             className={`property-card-image w-full h-full object-cover transition-opacity duration-300 ${
               imageLoaded ? 'opacity-100' : 'opacity-0'
             }`}
@@ -202,10 +203,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Image Count */}
-        {property.images.length > 1 && (
+        {property?.images?.length! > 1 && (
           <div className="absolute bottom-3 right-3">
             <Badge variant="secondary" className="bg-black/50 text-white border-0 text-xs">
-              +{property.images.length - 1} more
+              +{property?.images?.length! - 1} more
             </Badge>
           </div>
         )}
@@ -220,7 +221,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           </h3>
           <div className="flex items-center space-x-1 text-muted-foreground text-sm">
             <MapPin size={14} />
-            <span>{property.location.area}, {property.location.city}</span>
+            <span>{property?.location?.area}, {property?.location?.city}</span>
           </div>
         </div>
 
@@ -239,13 +240,13 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               </div>
               <div className="flex items-center space-x-1">
                 <Bath size={14} />
-                <span>{property.bathrooms} bath{property.bathrooms > 1 ? 's' : ''}</span>
+                <span>{property.bathrooms} bath{property?.bathrooms! > 1 ? 's' : ''}</span>
               </div>
             </>
           )}
           <div className="flex items-center space-x-1">
             <Maximize size={14} />
-            <span>{property.plot_size.value}m²</span>
+            <span>{property?.plot_size?.value}m²</span>
           </div>
         </div>
 
@@ -264,7 +265,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         <div className="flex items-center justify-between pt-2 border-t border-border">
           <div className="flex flex-col">
             <span className="text-xl font-bold text-foreground">
-              {formatPrice(property.price)}
+              {formatMoney(property?.price!)}
             </span>
             <span className="text-xs text-muted-foreground">Total price</span>
           </div>

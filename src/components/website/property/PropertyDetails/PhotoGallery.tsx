@@ -6,11 +6,12 @@ import Link from 'next/link';
 import PropertyAssetDetailsModal from './PropertyAssetDetailsModal';
 import { useBodyOverflowHidden } from '@hooks/useBodyOverflowHidden';
 import { PropertyAssetTab } from './models';
-import { type Property } from '@components/website/property/models';
+import { QueryPropertyDto } from '@components/website/property/models';
 import { getFirstPropertyPhoto } from '@lib/utils';
+import Image from 'next/image';
 
 interface PhotoGalleryProps {
-  property: Property;
+  property: QueryPropertyDto;
 }
 
 export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ property }) => {
@@ -41,7 +42,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ property }) => {
             transition={{ duration: 0.3 }}
             onClick={() => handleImageClick(0)}
           >
-            <img
+            <Image
               src={getFirstPropertyPhoto(property)}
               alt="Main property view"
               className="w-full h-full object-cover property-card-image"
@@ -49,7 +50,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ property }) => {
           </motion.div>
 
           {/* Smaller Images */}
-          {property.images.slice(1, 7).map((image, index) => (
+          {property?.images?.slice(1, 7).map((image, index) => (
             <motion.div
               key={index}
               className="relative group cursor-pointer"
@@ -57,7 +58,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ property }) => {
               transition={{ duration: 0.3 }}
               onClick={() => handleImageClick(index + 1)}
             >
-              <img
+              <Image
                 src={image.url}
                 alt={`Property view ${index + 2}`}
                 className="w-full h-full object-cover property-card-image"

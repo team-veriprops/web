@@ -6,8 +6,9 @@ import { X, Heart, Share2, Camera, Bed, Bath, Sofa, Utensils } from "lucide-reac
 import PropertyPhotoGalleryModal from "./PropertyPhotoGalleryModal";
 import { PropertyAssetPhotoCategory, PropertyAssetTab } from "./models";
 // import { PropertyDetails } from "@lib/propertyMockData";
-import { Image, type Property } from "@components/website/property/models";
+import { PropertyImage, QueryPropertyDto, type Property } from "@components/website/property/models";
 import { FloatingNavCard } from "./FloatingNavCard";
+import Image from "next/image";
 
 // type Tab = "photos" | "floorplan" | "3dtour" | "streetview" | "redesign";
 // type PhotoCategory = "All" | "Kitchen" | "Bathroom" | "Bedroom" | "Living" | "Dining" | "Exterior" | "Amenities";
@@ -17,12 +18,12 @@ import { FloatingNavCard } from "./FloatingNavCard";
 //   category: PhotoCategory
 // };
 
-export default function PropertyAssetDetailsModal({ onClose, property, activatedTab = PropertyAssetTab.Photos }: { onClose: () => void, property: Property, activatedTab: PropertyAssetTab }) {
+export default function PropertyAssetDetailsModal({ onClose, property, activatedTab = PropertyAssetTab.Photos }: { onClose: () => void, property: QueryPropertyDto, activatedTab: PropertyAssetTab }) {
   const [activeTab, setActiveTab] = useState<PropertyAssetTab>(activatedTab);
   const [activeCategory, setActiveCategory] = useState<PropertyAssetPhotoCategory>(PropertyAssetPhotoCategory.All);
   const [galleryIndex, setGalleryIndex] = useState<number | null>(null);
   const [showRequestTourCard, setShowRequestTourCard] = useState(true)
-  const [filteredPhotos, setFilteredPhotos] = useState<Image[]>()
+  const [filteredPhotos, setFilteredPhotos] = useState<PropertyImage[]>()
 
   // const mockPhotos: PropertyAssetPhoto[] = [
   //   { id: 1, url: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=800&h=600&fit=crop", category: PropertyAssetPhotoCategory.Kitchen },
@@ -38,7 +39,7 @@ export default function PropertyAssetDetailsModal({ onClose, property, activated
   // ];
   
   const categories = [
-    { key: PropertyAssetPhotoCategory.All, label: `${PropertyAssetPhotoCategory.All} (${property.images.length})`, icon: Camera },
+    { key: PropertyAssetPhotoCategory.All, label: `${PropertyAssetPhotoCategory.All} (${property?.images?.length})`, icon: Camera },
     { key: PropertyAssetPhotoCategory.Kitchen, label: PropertyAssetPhotoCategory.Kitchen, icon: Utensils },
     { key: PropertyAssetPhotoCategory.Bathroom, label: PropertyAssetPhotoCategory.Bathroom, icon: Bath },
     { key: PropertyAssetPhotoCategory.Bedroom, label: PropertyAssetPhotoCategory.Bedroom, icon: Bed },
@@ -62,13 +63,13 @@ export default function PropertyAssetDetailsModal({ onClose, property, activated
 
     // console.log("category: ", category)
     // console.log("filterPhotos: ", filterPhotos(category).length)
-    return filterPhotos(category).length
+    return filterPhotos(category)?.length
   }
 
   const filterPhotos = (category: PropertyAssetPhotoCategory) => {
     return category === PropertyAssetPhotoCategory.All ?
     property.images :
-    property.images.filter((p) => {
+    property?.images?.filter((p) => {
       // console.log("activeCategory: ", activeCategory)
       // console.log("p.category: ", p.category, ", activeCategory: ", category)
       return p.category === category
@@ -149,7 +150,7 @@ export default function PropertyAssetDetailsModal({ onClose, property, activated
               <div className="flex-[2] px-2 sm:px-6 py-4 max-w-5xl ml-auto">
                 <div className="flex flex-wrap space-x-3 mb-6">
                   {categories.map((cat) => (
-                    (countCategoryPhotos(cat.key) <= 0 ? null :<button
+                    (countCategoryPhotos(cat?.key)! <= 0 ? null :<button
                       key={cat.key}
                       onClick={() => setActiveCategory(cat.key)}
                       className={`flex items-center px-2 py-1 rounded-full text-sm font-medium ${
@@ -165,7 +166,7 @@ export default function PropertyAssetDetailsModal({ onClose, property, activated
 
                 <div className="grid grid-cols-2 gap-4 pb-4">
                   {filteredPhotos.map((p, index) => (
-                    <img
+                    <Image
                       key={index}
                       src={p.url}
                       alt=""
@@ -179,7 +180,7 @@ export default function PropertyAssetDetailsModal({ onClose, property, activated
 
                 {galleryIndex !== null && (
                   <PropertyPhotoGalleryModal
-                    photos={property.images}
+                    photos={property?.images!}
                     initialIndex={galleryIndex}
                     initialCategory={activeCategory}
                     onClose={() => setGalleryIndex(null)}

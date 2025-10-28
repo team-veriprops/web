@@ -1,4 +1,4 @@
-import { Image } from "@components/website/property/models";
+import { PropertyImage } from "@components/website/property/models";
 // lib/unsplash-util.ts
 
 // Single image
@@ -8,7 +8,7 @@ export async function getRandomImage({
 }: {
   query: string;
   orientation?: "landscape" | "portrait" | "squarish";
-}): Promise<Image> {
+}): Promise<PropertyImage> {
   const images = await getRandomImages({ query, orientation, count: 1 });
   return images[0];
 }
@@ -22,7 +22,7 @@ export async function getRandomImages({
   query: string;
   orientation?: "landscape" | "portrait" | "squarish";
   count?: number;
-}): Promise<Image[]> {
+}): Promise<PropertyImage[]> {
   try {
     const params = new URLSearchParams({
       query,

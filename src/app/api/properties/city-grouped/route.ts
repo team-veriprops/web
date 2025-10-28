@@ -1,4 +1,4 @@
-import { QueryCityGroupedPropertiesDto, Property } from "@components/website/property/models";
+import { QueryCityGroupedPropertiesDto, Property, QueryPropertyDto } from "@components/website/property/models";
 import { properties } from "@data/mock-properties";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -19,16 +19,16 @@ export async function GET(req: NextRequest) {
   }
 
   // Group by city
-  const grouped: Record<string, Property[]> = {};
+  const grouped: Record<string, QueryPropertyDto[]> = {};
   filtered.forEach((p) => {
-    const key = p.location.grouping_city.toLowerCase();
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(p);
+    const key = p.location?.grouping_city.toLowerCase()!;
+    if (!grouped[key]) grouped[key!] = [];
+    grouped[key!].push(p);
   });
 
   let result: QueryCityGroupedPropertiesDto[] = Object.values(grouped).map(
     (props) => ({
-      city: props[0].location.grouping_city,
+      city: props[0].location?.grouping_city!,
       properties: props,
     })
   );
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   const paginated = result.slice(start, start + page_size);
 
   const pageResponse = {
-    data: paginated,
+    items: paginated,
     page,
     page_size: page_size,
     total_pages: Math.ceil(total / page_size),

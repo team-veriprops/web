@@ -13,15 +13,21 @@ import { useGlobalSettings } from "@stores/useGlobalSettings";
 interface TableFooterPaginationProps {
   page: number;
   totalPages: number;
-  setPage: (p: number) => void;
+  onNextPage: () => void;
+  onPreviousPage: () => void;
+  onResetPage: () => void;
 }
 
 export default function TableFooterPagination({
   page,
   totalPages,
-  setPage,
+  onNextPage,
+  onPreviousPage,
+  onResetPage
 }: TableFooterPaginationProps) {
-  const { settings, setRecordsPerPage } = useGlobalSettings();
+  const { settings, setRowsPerPage } = useGlobalSettings();
+
+  const adjustedPage = settings.firstPage === 0 ? page + 1 : page
 
   return (
     <div className="flex items-center justify-between p-4 border-t">
@@ -31,8 +37,8 @@ export default function TableFooterPagination({
         <Select
           value={settings.rowsPerPage.toString()}
           onValueChange={(v) => {
-            setRecordsPerPage(Number(v));
-            setPage(1); // reset back to page 1
+            setRowsPerPage(Number(v));
+            onResetPage();
           }}
         >
           <SelectTrigger className="w-[70px]">
@@ -51,21 +57,21 @@ export default function TableFooterPagination({
       {/* Pagination controls */}
       <div className="flex items-center space-x-2">
         <span className="text-sm">
-          Page {page} of {totalPages}
+          Page {adjustedPage} of {totalPages}
         </span>
         <Button
           variant="ghost"
           size="sm"
-          disabled={page === 1}
-          onClick={() => setPage(page - 1)}
+          disabled={page <= settings.firstPage}
+          onClick={onPreviousPage}
         >
           Prev
         </Button>
         <Button
           variant="ghost"
           size="sm"
-          disabled={page === totalPages}
-          onClick={() => setPage(page + 1)}
+          disabled={adjustedPage >= totalPages}
+          onClick={onNextPage}
         >
           Next
         </Button>

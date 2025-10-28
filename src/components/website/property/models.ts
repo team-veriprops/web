@@ -37,16 +37,14 @@ export class Money {
   plus(money: Money): Money {
     this.validateCurrency(money.getCurrency());
     this.validateNegativeCredit(money.getValue());
-    this.value += money.getValue();
-    return this;
+    return new Money(this.value + money.getValue(), this.currency);
   }
 
   minus(money: Money): Money {
     this.validateDebitBalance(money.getValue());
     this.validateCurrency(money.getCurrency());
     this.validateNegativeDebit(money.getValue());
-    this.value -= money.getValue();
-    return this;
+    return new Money(this.value - money.getValue(), this.currency);
   }
 
   compare(other: Money): number {
@@ -182,19 +180,20 @@ export interface NearbyPlaces {
   transit: Array<{ name: string; distance: Measurement }>;
 }
 
-export interface Image {
+export interface PropertyImage {
   title?: string;
   url: string;
   category?: PropertyAssetPhotoCategory;
 }
 
 export interface BaseProperty {
+  parcel_id?: string;
   slug: string;
   title: string;
   short_description: string;
   description: string;
   type: PropertyType;
-  images: Image[];
+  images: PropertyImage[];
   // title_docs: LandTitle[];
   price: Money;
   plot_size: Measurement;
@@ -273,7 +272,7 @@ export interface LandProperty extends BaseProperty {
 }
 
 /** Unified Property type */
-export interface Property extends HouseProperty, LandProperty{}
+export interface Property extends HouseProperty, LandProperty {}
 
 export interface Service {
   id: string;
@@ -331,17 +330,6 @@ export type LandFilters = CommonFilters & {
 
 export type PropertyFilters = HouseFilters | LandFilters;
 
-
-
-
-
-
-
-
-
-
-
-
 // Enums
 export enum PropertyStatus {
   CREATED = "created",
@@ -352,15 +340,18 @@ export enum PropertyStatus {
 }
 
 export enum VerificationStatus {
-  PENDING = "pending",
-  VERIFIED = "verified",
+  PENDING = "PENDING",
+  CORRECTIONS_NEEDED = "corrections_needed",
+  UNDER_REVIEW = "under_review",
+  VERIFIED = "VERIFIED",
+  FAILED = "FAILED",
   REJECTED = "rejected",
 }
 
 // Base Interfaces
 export interface PropertyBaseDto {
-  title: string;
-  description: string;
+  // title: string;
+  // description: string;
 }
 
 // Create DTO
@@ -390,6 +381,8 @@ export interface PartialUpdatePropertyDto {
 //   sortOrder?: "asc" | "desc";
 // }
 
+export type BedSelection = "any" | "studio" | { min: number; max?: number };
+
 // Search DTO
 export interface SearchPropertyDto extends PageRequest, BaseQueryDto {
   title?: string | null;
@@ -400,9 +393,6 @@ export interface SearchPropertyDto extends PageRequest, BaseQueryDto {
   active?: boolean | null;
   verification_status?: VerificationStatus | null;
   grouping_city?: string;
-
-
-
 
   price_min?: number;
   price_max?: number;
@@ -425,36 +415,36 @@ export interface SearchPropertyDto extends PageRequest, BaseQueryDto {
   };
   proximity?: { categories: string[]; distanceKm: number };
   zoning?: Array<PropertyZoning>;
-  
-  bedrooms?: { min?: number; max?: number } | "any" | "studio";
-  bathrooms?: 1 | 1.5 | 2 | 2.5 | 3 | 4 | 0; // 0 means Any
+
+  bedrooms?: BedSelection;
+  bathrooms?: number; // 1 | 1.5 | 2 | 2.5 | 3 | 4 | 0; // 0 means Any
   home_types?: Array<HomeType>;
-  
+
   land_types?: Array<LandType>;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Query DTO (combination of Create + PartialUpdate + BaseQuery)
 export interface QueryPropertyDto
   extends CreatePropertyDto,
     PartialUpdatePropertyDto,
-    BaseQueryDto, Property {}
+    BaseQueryDto,
+    Partial<Property> {}
+
+export interface QueryLandPropertyDto
+  extends CreatePropertyDto,
+    PartialUpdatePropertyDto,
+    BaseQueryDto,
+    LandProperty {}
+
+export interface QueryHousePropertyDto
+  extends CreatePropertyDto,
+    PartialUpdatePropertyDto,
+    BaseQueryDto,
+    HouseProperty {}
 
 export interface QueryPropertyDetailsDto extends QueryPropertyDto {}
 
-
 export interface QueryCityGroupedPropertiesDto {
   city: string;
-  properties: Property[];
+  properties: QueryPropertyDto[];
 }

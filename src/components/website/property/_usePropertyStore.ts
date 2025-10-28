@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { QueryPropertyDto, SearchPropertyDto } from "@components/website/property/models";
-import { PropertyService } from "@components/website/property/property-service";
+import { PropertyService } from "@components/website/property/libs/property-service";
 import { httpClient } from "containers";
 
 interface PropertyStore {
@@ -42,7 +42,7 @@ export const usePropertyStore = create<PropertyStore>()(
       };
     },
     {
-      name: "property-filters", // localStorage key
+      name: "properties", // localStorage key
       partialize: (state: { filters: any; currentProperty: QueryPropertyDto }) => ({ filters: state.filters, currentProperty: state.currentProperty,}), // persist only filters
     }
   )

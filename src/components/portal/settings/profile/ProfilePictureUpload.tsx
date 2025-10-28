@@ -5,6 +5,7 @@ import { Button } from "@3rdparty/ui/button";
 import { toast } from "@3rdparty/ui/use-toast";
 import { Upload, User } from "lucide-react";
 import { Label } from "@components/3rdparty/ui/label";
+import Image from "next/image";
 
 export default function ProfilePictureUpload() {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
@@ -32,7 +33,7 @@ export default function ProfilePictureUpload() {
         <div className="relative">
           <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
             {profilePicture ? (
-              <img
+              <Image
                 src={profilePicture}
                 alt="Profile"
                 className="w-full h-full object-cover"

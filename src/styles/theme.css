@@ -16,7 +16,7 @@
     --color-primary-hover: hsl(215 85% 25%);
 
     /* Soft gray secondary */
-    --color-secondary: hsl(210 20% 96%);
+    --color-secondary: hsl(174 40% 96%);
     --color-secondary-foreground: hsl(215 25% 20%);
 
     /* Muted backgrounds and text */
@@ -28,8 +28,53 @@
     --color-accent-foreground: hsl(165 85% 25%);
     --color-accent-strong: hsl(165 85% 35%);
 
-    --color-destructive: hsl(0 84.2% 60.2%);
-    --color-destructive-foreground: hsl(210 40% 98%);
+
+    /* Status colors */
+    --color-success: hsl(142 71% 45%);
+    --color-success-foreground: hsl(0 0% 100%);
+
+    --color-warning: hsl(38 92% 50%);
+    --color-warning-foreground: hsl(174 20% 15%);
+
+    --color-destructive: hsl(0 72% 51%);
+    --color-destructive-foreground: hsl(0 0% 100%);
+
+
+
+
+
+    /* Reward Accent - Amber */
+    --color-reward: hsl(38 92% 50%);
+    --color-reward-foreground: hsl(174 20% 15%);
+    --color-reward-light: hsl(38 100% 60%);
+    --color-reward-lighter: hsl(38 100% 95%);
+
+
+    /* Trust Network specific */
+    /* --color-escrow: hsl(214 95% 36%);
+    --color-escrow-foreground: hsl(0 0% 100%);
+    --color-escrow-light: hsl(214 84% 85%);
+
+    --color-available: hsl(142 71% 45%);
+    --color-available-light: hsl(142 60% 90%);
+
+    --color-tier-locked: hsl(174 10% 85%);
+    --color-tier-active: hsl(174 84% 26%);
+
+    --color-border: hsl(174 20% 90%);
+    --color-input: hsl(174 20% 90%);
+    --color-ring: hsl(174 84% 26%); */
+
+    --radius: 0.75rem;
+
+    /* Animations */
+    --color-transition-smooth: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+
+
+
+
+
+
 
     --color-border: hsl(215 15% 90%);
     --color-input: hsl(215 15% 94%);

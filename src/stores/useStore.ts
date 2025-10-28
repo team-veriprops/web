@@ -1,5 +1,4 @@
 // Veriprops Global State Management with Zustand
-import { Company } from '@components/portal/company/models';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -237,14 +236,16 @@ interface UIState {
     maxPrice: number;
     verified: boolean;
   };
-  activeCompany: Company | null;
+  // activeCompany: Company | null;
+  isShareModalOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   setCompareModalOpen: (open: boolean) => void;
   setOnBoardingModalOpen: (open: boolean) => void;
   setProfileDropdownOpen: (open: boolean) => void;
   updateSearchFilters: (filters: Partial<UIState['searchFilters']>) => void;
   resetSearchFilters: () => void;
-  setActiveCompany: (company: Company) => void;
+  // setActiveCompany: (company: Company) => void;
+  setShareModalOpen: (open: boolean) => void;
 }
 
 const defaultFilters = {
@@ -261,7 +262,8 @@ export const useUI = create<UIState>((set) => ({
   isOnBoardingModalOpen: false,
   isProfileDropdownOpen: false,
   searchFilters: defaultFilters,
-  activeCompany: null,
+  // activeCompany: null,
+  isShareModalOpen: false,
   setMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
   setCompareModalOpen: (open) => set({ isCompareModalOpen: open }),
   setOnBoardingModalOpen: (open) => set({ isOnBoardingModalOpen: open }),
@@ -270,5 +272,6 @@ export const useUI = create<UIState>((set) => ({
     searchFilters: { ...state.searchFilters, ...filters }
   })),
   resetSearchFilters: () => set({ searchFilters: defaultFilters }),
-  setActiveCompany: (company) => set({ activeCompany: company }),
+  // setActiveCompany: (company) => set({ activeCompany: company }),
+  setShareModalOpen: (open) => set({ isShareModalOpen: open }),
 }));

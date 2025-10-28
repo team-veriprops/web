@@ -11,6 +11,8 @@ import {
   PropertyStage,
   PropertyType,
   PropertyZoning,
+  QueryHousePropertyDto,
+  QueryLandPropertyDto,
   QueryPropertyDto,
   RoadState,
   TransactionCurrency,
@@ -27,7 +29,7 @@ export const stateCityMap: { state: string; grouping_city: string; cities: strin
   { state: "Delta", grouping_city: "Asaba", cities: ["Cable Point", "GRA", "Cable Point", "Bonsaac Layout", "Okpanam"] },
 ];
 
-function getRandomStateCity() {
+export function getRandomStateCity() {
   const stateEntry = faker.helpers.arrayElement(stateCityMap);
   const city = faker.helpers.arrayElement(stateEntry.cities);
   return { state: stateEntry.state, grouping_city:stateEntry.grouping_city, city };
@@ -55,10 +57,11 @@ function getLandAssetCategory(index: number) {
 }
 
 // ---------------- HOUSE ----------------
-export async function generateHouse(): Promise<HouseProperty> {
+export async function generateHouse(): Promise<QueryHousePropertyDto> {
   const { state, grouping_city, city } = getRandomStateCity();
   return {
     id: faker.string.uuid(),
+    parcel_id: `PARC-${faker.number.int({ min: 200, max: 1000 })}`,
     slug: faker.lorem.slug(),
     title: faker.company.catchPhrase(),
     short_description: faker.lorem.sentence(),
@@ -236,10 +239,11 @@ export async function generateHouse(): Promise<HouseProperty> {
 }
 
 // ---------------- LAND ----------------
-export async function generateLand(): Promise<LandProperty> {
+export async function generateLand(): Promise<QueryLandPropertyDto> {
   const { state, grouping_city, city } = getRandomStateCity();
   return {
     id: faker.string.uuid(),
+    parcel_id: `PARC-${faker.number.int({ min: 200, max: 1000 })}`,
     slug: faker.lorem.slug(),
     title: faker.company.buzzPhrase(),
     short_description: faker.lorem.sentence(),

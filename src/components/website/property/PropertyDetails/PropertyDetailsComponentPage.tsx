@@ -8,7 +8,7 @@ import { PropertySections } from '@components/website/property/PropertyDetails/P
 import { RecommendedPropertiesComponent } from '@components/website/property/PropertyDetails/RecommendedPropertiesComponent';
 import { PropertyType } from '@components/website/property/models';
 import { useParams } from 'next/navigation';
-import { usePropertyQueries } from '../usePropertyQueries';
+import { usePropertyQueries } from '../libs/usePropertyQueries';
 
 export default function PropertyDetailsComponentPage() {
   const params = useParams<{ slug: string }>();

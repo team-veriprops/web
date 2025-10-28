@@ -209,7 +209,7 @@ export const mockRecommendedProperties = [
   }
 ];
 
-// export const formatPrice = (price: number): string => {
+// export const formatMoney = (price: number): string => {
 //   if (price >= 1000000) {
 //     return `₦${(price / 1000000).toFixed(0)}M`;
 //   }
